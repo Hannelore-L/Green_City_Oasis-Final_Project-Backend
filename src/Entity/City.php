@@ -1,0 +1,180 @@
+<?php
+
+//      __________________________________________________________________________________
+//                                                                     N A M E S P A C E
+//      __________________________________________________________________________________
+
+namespace App\Entity;
+
+
+//      __________________________________________________________________________________
+//                                                                                U S E
+//      __________________________________________________________________________________
+use ApiPlatform\Core\Annotation\ApiResource;
+use App\Repository\CityRepository;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
+
+//      __________________________________________________________________________________
+//                                                                             C L A S S
+//      __________________________________________________________________________________
+/**
+ * @ApiResource(
+ *     collectionOperations={ "get" },
+ *     itemOperations={ "get" },
+ *     normalizationContext={ "groups" = { "city:read" }, "swagger_definition_name" = "Read" }
+ * )
+ * @ORM\Entity(repositoryClass=CityRepository::class)
+ */
+class City
+{
+    //      __________________________________________________________________________________
+    //                                                                     P R O P E R T I E S
+    //      __________________________________________________________________________________
+
+    //      -               -               -               I D               -               -               -
+    /**
+     * The id of the city
+     *
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
+     * @Groups( { "city:read" } )
+     */
+    private $id;
+
+
+    //      -               -               -               C O U N T R Y   I D               -               -               -
+    /**
+     * The id of the country this city belongs to
+     *
+     * @ORM\Column(type="integer")
+     * @Groups( { "city:read" } )
+     */
+    private $countryId;
+
+
+    //      -               -               -               Z I P               -               -               -
+    /**
+     * The zip code of the city
+     *
+     * @ORM\Column(type="smallint")
+     * @Groups( { "city:read" } )
+     */
+    private $zip;
+
+
+    //      -               -               -               N A M E               -               -               -
+    /**
+     * The name of the city
+     *
+     * @ORM\Column(type="string", length=255)
+     * @Groups( { "city:read" } )
+     */
+    private $name;
+
+
+    //      -               -               -               P R O V I N C E               -               -               -
+    /**
+     * The province the city is located in
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups( { "city:read" } )
+     */
+    private $province;
+
+
+    //      __________________________________________________________________________________
+    //                                                                        M E T H O D S
+    //      __________________________________________________________________________________
+
+    //      -               -               -              getter ID               -               -               -
+    /**
+     * The id of the country this city belongs to
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+
+    //      -               -               -              getter & setter COUNTRY ID               -               -               -
+    /**
+     * Get the id of the country this city belongs to
+     */
+    public function getCountryId(): ?int
+    {
+        return $this->countryId;
+    }
+
+    /**
+     * Set the id of the country this city belongs to
+     */
+    public function setCountryId(int $countryId): self
+    {
+        $this->countryId = $countryId;
+
+        return $this;
+    }
+
+
+    //      -               -               -              getter & setter ZIP               -               -               -
+    /**
+     * Get the zip code of the city
+     */
+    public function getZip(): ?int
+    {
+        return $this->zip;
+    }
+
+    /**
+     * Set the zip code of the city
+     */
+    public function setZip(int $zip): self
+    {
+        $this->zip = $zip;
+
+        return $this;
+    }
+
+
+    //      -               -               -              getter & setter NAME               -               -               -
+    /**
+     * Get the name of the city
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set the name of the city
+     */
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+
+    //      -               -               -              getter & setter PROVINCE               -               -               -
+    /**
+     * Get the province the city is located in
+     */
+    public function getProvince(): ?string
+    {
+        return $this->province;
+    }
+
+    /**
+     * Set the province the city is located in
+     */
+    public function setProvince(?string $province): self
+    {
+        $this->province = $province;
+
+        return $this;
+    }
+}

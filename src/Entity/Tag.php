@@ -13,6 +13,8 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\TagRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -54,6 +56,22 @@ class Tag
 
 
     //      __________________________________________________________________________________
+    //                                                                        R E L A T I O N S
+    //      __________________________________________________________________________________
+
+    //      -               -               -               L O C A T I O N   I D               -               -               -
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Location", inversedBy="tags")
+     */
+    private $locationId;
+
+    public function __construct()
+    {
+        $this->locationId = new ArrayCollection();
+    }
+
+
+    //      __________________________________________________________________________________
     //                                                                        M E T H O D S
     //      __________________________________________________________________________________
 
@@ -73,6 +91,38 @@ class Tag
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+
+    //      __________________________________________________________________________________
+    //                                                                        R E L A T I O N S
+    //      __________________________________________________________________________________
+
+    //    //      -               -               -              getter, adder, remover REVIEWS               -               -               -
+    /**
+     * @return Collection|location[]
+     */
+    public function getLocationId(): Collection
+    {
+        return $this->locationId;
+    }
+
+    public function addLocationId(location $locationId): self
+    {
+        if (!$this->locationId->contains($locationId)) {
+            $this->locationId[] = $locationId;
+        }
+
+        return $this;
+    }
+
+    public function removeLocationId(location $locationId): self
+    {
+        if ($this->locationId->contains($locationId)) {
+            $this->locationId->removeElement($locationId);
+        }
 
         return $this;
     }

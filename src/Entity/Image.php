@@ -58,18 +58,19 @@ class Image
     //      -               -               -               U S E R   I D               -               -               -
     /**
      * The id of the user uploading the image
-     *
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="images")
+     * @ORM\JoinColumn(nullable=false)
      * @Groups( { "image:read" , "image:write" } )
      */
     private $userId;
 
 
-    //      -               -               -               L O C A T I O N   I D               -               -               -
+//    //      -               -               -               L O C A T I O N   I D               -               -               -
     /**
      * The id of the location the image is of
      *
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="images")
+     * @ORM\JoinColumn(nullable=false)
      * @Groups( { "image:read", "image:write" } )
      */
     private $locationId;
@@ -157,7 +158,7 @@ class Image
     /**
      * Get the id of the user uploading the image
      */
-    public function getUserId(): ?int
+    public function getUserId(): ?user
     {
         return $this->userId;
     }
@@ -165,7 +166,7 @@ class Image
     /**
      * Set the id of the user uploading the image
      */
-    public function setUserId(int $userId): self
+    public function setUserId(?user $userId): self
     {
         $this->userId = $userId;
 
@@ -177,7 +178,7 @@ class Image
     /**
      * Get the id of the location the image is of
      */
-    public function getLocationId(): ?int
+    public function getLocationId(): ?location
     {
         return $this->locationId;
     }
@@ -185,7 +186,7 @@ class Image
     /**
      * Set the id of the location the image is of
      */
-    public function setLocationId(int $locationId): self
+    public function setLocationId(?location $locationId): self
     {
         $this->locationId = $locationId;
 

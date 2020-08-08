@@ -15,6 +15,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\LocationRepository;
 use Carbon\Carbon;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
@@ -118,6 +120,37 @@ class Location
      */
     private $isDeleted = false;
 
+    //      __________________________________________________________________________________
+    //                                                                        R E L A T I O N S
+    //      __________________________________________________________________________________
+
+    //      -               -               -               I M A G E S               -               -               -
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="locationId")
+     * @Groups( { "location:read" } )
+     */
+    private $images;
+
+    //      -               -               -               R E V I E W S               -               -               -
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Review", mappedBy="locationId")
+     */
+    private $reviews;
+
+
+    //      -               -               -               T A G S               -               -               -
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", mappedBy="locationId")
+     */
+    private $tags;
+
+
+    //      -               -               -               E V E N T S               -               -               -
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Event", mappedBy="locationId")
+     */
+    private $events;
+
 
     //      __________________________________________________________________________________
     //                                                                        M E T H O D S
@@ -128,7 +161,11 @@ class Location
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
-    }
+//        $this->images = new ArrayCollection();
+
+$this->reviews = new ArrayCollection();
+$this->tags = new ArrayCollection();
+$this->events = new ArrayCollection();    }
 
 
     //      -               -               -              getter ID               -               -               -
@@ -277,6 +314,133 @@ class Location
     public function setIsDeleted(bool $isDeleted): self
     {
         $this->isDeleted = $isDeleted;
+
+        return $this;
+    }
+
+
+    //      __________________________________________________________________________________
+    //                                                                        R E L A T I O N S
+    //      __________________________________________________________________________________
+
+    //      -               -               -              getter, adder, remover IMAGES               -               -               -
+    /**
+     * @return Collection|Image[]
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+            $image->setLocationId($this);
+        }
+
+        return $this;
+    }
+
+        public function removeImage(Image $image): self
+    {
+        if ($this->images->contains($image)) {
+            $this->images->removeElement($image);
+            // set the owning side to null (unless already changed)
+            if ($image->getLocationId() === $this) {
+                $image->setLocationId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    //      -               -               -              getter, adder, remover REVIEWS               -               -               -
+    /**
+     * @return Collection|Review[]
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): self
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews[] = $review;
+            $review->setLocationId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): self
+    {
+        if ($this->reviews->contains($review)) {
+            $this->reviews->removeElement($review);
+            // set the owning side to null (unless already changed)
+            if ($review->getLocationId() === $this) {
+                $review->setLocationId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    //    -               -               -              getter, adder, remover TAGS               -               -               -
+    /**
+     * @return Collection|Tag[]
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+            $tag->addLocationId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        if ($this->tags->contains($tag)) {
+            $this->tags->removeElement($tag);
+            $tag->removeLocationId($this);
+        }
+
+        return $this;
+    }
+
+    //      -               -               -              getter, adder, remover EVENTS               -               -               -
+    /**
+     * @return Collection|Event[]
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): self
+    {
+        if (!$this->events->contains($event)) {
+            $this->events[] = $event;
+            $event->addLocationId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): self
+    {
+        if ($this->events->contains($event)) {
+            $this->events->removeElement($event);
+            $event->removeLocationId($this);
+        }
 
         return $this;
     }

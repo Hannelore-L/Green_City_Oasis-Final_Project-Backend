@@ -12,6 +12,8 @@ namespace App\Entity;
 //      __________________________________________________________________________________
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -49,11 +51,11 @@ class City
     /**
      * The id of the country this city belongs to
      *
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Country", inversedBy="cities")
+     * @ORM\JoinColumn(nullable=false)
      * @Groups( { "city:read" } )
      */
     private $countryId;
-
 
     //      -               -               -               Z I P               -               -               -
     /**
@@ -86,8 +88,26 @@ class City
 
 
     //      __________________________________________________________________________________
+    //                                                                        R E L A T I O N S
+    //      __________________________________________________________________________________
+
+    //      -               -               -               U S E R S               -               -               -
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="cityId")
+     */
+    private $users;
+
+    //      __________________________________________________________________________________
     //                                                                        M E T H O D S
     //      __________________________________________________________________________________
+
+    //      -               -               -              C O N S T R U C T O R               -               -               -
+
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
+
 
     //      -               -               -              getter ID               -               -               -
     /**
@@ -103,7 +123,7 @@ class City
     /**
      * Get the id of the country this city belongs to
      */
-    public function getCountryId(): ?int
+    public function getCountryId(): ?country
     {
         return $this->countryId;
     }
@@ -111,7 +131,7 @@ class City
     /**
      * Set the id of the country this city belongs to
      */
-    public function setCountryId(int $countryId): self
+    public function setCountryId(?country $countryId): self
     {
         $this->countryId = $countryId;
 
@@ -174,6 +194,43 @@ class City
     public function setProvince(?string $province): self
     {
         $this->province = $province;
+
+        return $this;
+    }
+
+
+    //      __________________________________________________________________________________
+    //                                                                        R E L A T I O N S
+    //      __________________________________________________________________________________
+
+    //      -               -               -              getter, adder, remover USERS               -               -               -
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setCityId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            // set the owning side to null (unless already changed)
+            if ($user->getCityId() === $this) {
+                $user->setCityId(null);
+            }
+        }
 
         return $this;
     }

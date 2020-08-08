@@ -57,7 +57,8 @@ class Review
     /**
      * The location the review belongs to
      *
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="reviews")
+     * @ORM\JoinColumn(nullable=false)
      * @Groups( { "review:read", "review:write" } )
      */
     private $locationId;
@@ -67,7 +68,8 @@ class Review
     /**
      * The user that wrote the review
      *
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="reviews")
+     * @ORM\JoinColumn(nullable=false)
      * @Groups( { "review:read", "review:write" } )
      */
     private $userId;
@@ -146,7 +148,7 @@ class Review
     /**
      * Get the location the review belongs to
      */
-    public function getLocationId(): ?int
+    public function getLocationId(): ?location
     {
         return $this->locationId;
     }
@@ -154,7 +156,7 @@ class Review
     /**
      * Set the location the review belongs to
      */
-    public function setLocationId(int $locationId): self
+    public function setLocationId(?location $locationId): self
     {
         $this->locationId = $locationId;
 
@@ -166,7 +168,7 @@ class Review
     /**
      * Get the user that wrote the review
      */
-    public function getUserId(): ?int
+    public function getUserId(): ?user
     {
         return $this->userId;
     }
@@ -174,7 +176,7 @@ class Review
     /**
      * Set the user that wrote the review
      */
-    public function setUserId(int $userId): self
+    public function setUserId(?user $userId): self
     {
         $this->userId = $userId;
 
@@ -276,4 +278,5 @@ class Review
 
         return $this;
     }
+
 }

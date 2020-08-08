@@ -13,6 +13,8 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\EventRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -115,6 +117,22 @@ class Event
      * @Groups( { "tag:read" } )
      */
     private $endTime;
+
+
+    //      __________________________________________________________________________________
+    //                                                                        R E L A T I O N S
+    //      __________________________________________________________________________________
+
+    //      -               -               -               L O C A T I O N   I D               -               -               -
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Location", inversedBy="events")
+     */
+    private $locationId;
+
+    public function __construct()
+    {
+        $this->locationId = new ArrayCollection();
+    }
 
 
     //      __________________________________________________________________________________
@@ -266,6 +284,38 @@ class Event
     public function setEndTime(\DateTimeInterface $endTime): self
     {
         $this->endTime = $endTime;
+
+        return $this;
+    }
+
+
+    //      __________________________________________________________________________________
+    //                                                                        R E L A T I O N S
+    //      __________________________________________________________________________________
+
+    //      -               -               -              getter, adder, remover LOCATION ID               -               -               -
+    /**
+     * @return Collection|location[]
+     */
+    public function getLocationId(): Collection
+    {
+        return $this->locationId;
+    }
+
+    public function addLocationId(location $locationId): self
+    {
+        if (!$this->locationId->contains($locationId)) {
+            $this->locationId[] = $locationId;
+        }
+
+        return $this;
+    }
+
+    public function removeLocationId(location $locationId): self
+    {
+        if ($this->locationId->contains($locationId)) {
+            $this->locationId->removeElement($locationId);
+        }
 
         return $this;
     }

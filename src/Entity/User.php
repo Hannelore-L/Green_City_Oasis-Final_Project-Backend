@@ -14,9 +14,13 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
 use App\Repository\UserRepository;
 use Carbon\Carbon;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 //      __________________________________________________________________________________
@@ -31,6 +35,8 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
  * )
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ApiFilter( NumericFilter::class, properties={ "cityId" , "countryId" } )
+ * @UniqueEntity( fields={ "email" } )
+ * @UniqueEntity( fields={ "displayName" } )
  */
 class User implements \Symfony\Component\Security\Core\User\UserInterface
 {
@@ -56,6 +62,8 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      *
      * @ORM\Column(type="string", length=255)
      * @Groups( { "user:read", "user:write" } )
+     * @Assert\NotBlank()
+     * @Assert\Email()
      */
     private $email;
 
@@ -83,7 +91,8 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     /**
      * The id of the city the user lives in
      *
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\City", inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
      * @Groups( { "user:read", "user:write" } )
      */
     private $cityId;
@@ -93,10 +102,12 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     /**
      * The id of the country the user lives in
      *
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Country", inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
      * @Groups( { "user:read", "user:write" } )
      */
     private $countryId;
+
 
 
     //      -               -               -               D I S P L A Y   N A M E               -               -               -
@@ -105,6 +116,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      *
      * @ORM\Column(type="string", length=255)
      * @Groups( { "user:read", "user:write" } )
+     * @Assert\NotBlank()
      */
     private $displayName;
 
@@ -149,6 +161,23 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
 
 
     //      __________________________________________________________________________________
+    //                                                                        R E L A T I O N S
+    //      __________________________________________________________________________________
+
+    //      -               -               -               I M A G E S               -               -               -
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="userId")
+     */
+    private $images;
+
+    //      -               -               -               R E V I E W S               -               -               -
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Review", mappedBy="userId")
+     */
+    private $reviews;
+
+
+    //      __________________________________________________________________________________
     //                                                                        M E T H O D S
     //      __________________________________________________________________________________
 
@@ -157,6 +186,8 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->images = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
 
@@ -259,7 +290,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     /**
      * Get the id of the city the user lives in
      */
-    public function getCityId(): ?int
+    public function getCityId(): ?city
     {
         return $this->cityId;
     }
@@ -267,7 +298,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     /**
      * Set the id of the city the user lives in
      */
-    public function setCityId(?int $cityId): self
+    public function setCityId(?city $cityId): self
     {
         $this->cityId = $cityId;
 
@@ -279,7 +310,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     /**
      * Get the id of the country the user lives in
      */
-    public function getCountryId(): ?int
+    public function getCountryId(): ?country
     {
         return $this->countryId;
     }
@@ -287,7 +318,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     /**
      * Set the id of the country the user lives in
      */
-    public function setCountryId(int $countryId): self
+    public function setCountryId(?country $countryId): self
     {
         $this->countryId = $countryId;
 
@@ -393,5 +424,75 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     public function getCreatedAtAgo(): string
     {
         return Carbon::instance( $this->getCreatedAt() )->diffForHumans();
+    }
+
+
+    //      __________________________________________________________________________________
+    //                                                                        R E L A T I O N S
+    //      __________________________________________________________________________________
+
+    //      -               -               -              getter, adder, remover IMAGES               -               -               -
+    /**
+     * @return Collection|Image[]
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+            $image->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): self
+    {
+        if ($this->images->contains($image)) {
+            $this->images->removeElement($image);
+            // set the owning side to null (unless already changed)
+            if ($image->getUserId() === $this) {
+                $image->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+    //      -               -               -              getter, adder, remover REVIEWS               -               -               -
+    /**
+     * @return Collection|Review[]
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): self
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews[] = $review;
+            $review->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): self
+    {
+        if ($this->reviews->contains($review)) {
+            $this->reviews->removeElement($review);
+            // set the owning side to null (unless already changed)
+            if ($review->getUserId() === $this) {
+                $review->setUserId(null);
+            }
+        }
+
+        return $this;
     }
 }

@@ -126,28 +126,31 @@ class Location
 
     //      -               -               -               I M A G E S               -               -               -
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="locationId")
+     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="location")
      * @Groups( { "location:read" } )
      */
     private $images;
 
     //      -               -               -               R E V I E W S               -               -               -
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Review", mappedBy="locationId")
+     * @ORM\OneToMany(targetEntity="App\Entity\Review", mappedBy="location")
+     * @Groups( { "location:read" } )
      */
     private $reviews;
 
 
     //      -               -               -               T A G S               -               -               -
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", mappedBy="locationId")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", mappedBy="location")
+     * @Groups( { "location:read" } )
      */
     private $tags;
 
 
     //      -               -               -               E V E N T S               -               -               -
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Event", mappedBy="locationId")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Event", mappedBy="location")
+     * @Groups( { "location:read" } )
      */
     private $events;
 
@@ -161,11 +164,11 @@ class Location
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
-//        $this->images = new ArrayCollection();
-
-$this->reviews = new ArrayCollection();
-$this->tags = new ArrayCollection();
-$this->events = new ArrayCollection();    }
+        $this->images = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
+        $this->tags = new ArrayCollection();
+        $this->events = new ArrayCollection();
+    }
 
 
     //      -               -               -              getter ID               -               -               -
@@ -336,7 +339,7 @@ $this->events = new ArrayCollection();    }
     {
         if (!$this->images->contains($image)) {
             $this->images[] = $image;
-            $image->setLocationId($this);
+            $image->setLocation($this);
         }
 
         return $this;
@@ -347,8 +350,8 @@ $this->events = new ArrayCollection();    }
         if ($this->images->contains($image)) {
             $this->images->removeElement($image);
             // set the owning side to null (unless already changed)
-            if ($image->getLocationId() === $this) {
-                $image->setLocationId(null);
+            if ($image->getLocation() === $this) {
+                $image->setLocation(null);
             }
         }
 
@@ -368,7 +371,7 @@ $this->events = new ArrayCollection();    }
     {
         if (!$this->reviews->contains($review)) {
             $this->reviews[] = $review;
-            $review->setLocationId($this);
+            $review->setLocation($this);
         }
 
         return $this;
@@ -379,8 +382,8 @@ $this->events = new ArrayCollection();    }
         if ($this->reviews->contains($review)) {
             $this->reviews->removeElement($review);
             // set the owning side to null (unless already changed)
-            if ($review->getLocationId() === $this) {
-                $review->setLocationId(null);
+            if ($review->getLocation() === $this) {
+                $review->setLocation(null);
             }
         }
 
@@ -400,7 +403,7 @@ $this->events = new ArrayCollection();    }
     {
         if (!$this->tags->contains($tag)) {
             $this->tags[] = $tag;
-            $tag->addLocationId($this);
+            $tag->addLocation($this);
         }
 
         return $this;
@@ -410,7 +413,7 @@ $this->events = new ArrayCollection();    }
     {
         if ($this->tags->contains($tag)) {
             $this->tags->removeElement($tag);
-            $tag->removeLocationId($this);
+            $tag->removeLocation($this);
         }
 
         return $this;
@@ -429,7 +432,7 @@ $this->events = new ArrayCollection();    }
     {
         if (!$this->events->contains($event)) {
             $this->events[] = $event;
-            $event->addLocationId($this);
+            $event->addLocation($this);
         }
 
         return $this;
@@ -439,7 +442,7 @@ $this->events = new ArrayCollection();    }
     {
         if ($this->events->contains($event)) {
             $this->events->removeElement($event);
-            $event->removeLocationId($this);
+            $event->removeLocation($this);
         }
 
         return $this;

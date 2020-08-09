@@ -56,6 +56,28 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     private $id;
 
 
+    //      -               -               -               C I T Y   I D               -               -               -
+    /**
+     * The id of the city the user lives in
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\City", inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups( { "user:read", "user:write" } )
+     */
+    private $city;
+
+
+    //      -               -               -               C O U N T R Y   I D               -               -               -
+    /**
+     * The id of the country the user lives in
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\Country", inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups( { "user:read", "user:write" } )
+     */
+    private $country;
+
+
     //      -               -               -               E M A I L               -               -               -
     /**
      * The e-mail address of the user, has to be unique
@@ -85,29 +107,6 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      * @ORM\Column(type="json", nullable=true)
      */
     private $roles = array();
-
-
-    //      -               -               -               C I T Y   I D               -               -               -
-    /**
-     * The id of the city the user lives in
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\City", inversedBy="users")
-     * @ORM\JoinColumn(nullable=false)
-     * @Groups( { "user:read", "user:write" } )
-     */
-    private $cityId;
-
-
-    //      -               -               -               C O U N T R Y   I D               -               -               -
-    /**
-     * The id of the country the user lives in
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Country", inversedBy="users")
-     * @ORM\JoinColumn(nullable=false)
-     * @Groups( { "user:read", "user:write" } )
-     */
-    private $countryId;
-
 
 
     //      -               -               -               D I S P L A Y   N A M E               -               -               -
@@ -141,15 +140,6 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     private $lastName;
 
 
-    //      -               -               -               R E G K E Y               -               -               -
-    /**
-     * The regkey for the user
-     *
-     * @ORM\Column(type="string", length=255)
-     */
-    private $regkey;
-
-
     //      -               -               -               C R E A T E D   A T               -               -               -
     /**
      * The time when the user made their account
@@ -160,19 +150,30 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     private $createdAt;
 
 
+    //      -               -               -               R E G K E Y               -               -               -
+    /**
+     * The regkey for the user
+     *
+     * @ORM\Column(type="string", length=255)
+     */
+    private $regkey;
+
+
     //      __________________________________________________________________________________
     //                                                                        R E L A T I O N S
     //      __________________________________________________________________________________
 
     //      -               -               -               I M A G E S               -               -               -
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="userId")
+     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="user")
+     * @Groups( { "user:read" } )
      */
     private $images;
 
     //      -               -               -               R E V I E W S               -               -               -
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Review", mappedBy="userId")
+     * @ORM\OneToMany(targetEntity="App\Entity\Review", mappedBy="user")
+     * @Groups( { "user:read" } )
      */
     private $reviews;
 
@@ -198,6 +199,46 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+
+    //      -               -               -              getter & setter CITY ID               -               -               -
+    /**
+     * Get the id of the city the user lives in
+     */
+    public function getCity(): ?city
+    {
+        return $this->city;
+    }
+
+    /**
+     * Set the id of the city the user lives in
+     */
+    public function setCity(?city $city): self
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+
+    //      -               -               -              getter & setter COUNTRY ID               -               -               -
+    /**
+     * Get the id of the country the user lives in
+     */
+    public function getCountry(): ?country
+    {
+        return $this->country;
+    }
+
+    /**
+     * Set the id of the country the user lives in
+     */
+    public function setCountry(?country $country): self
+    {
+        $this->country = $country;
+
+        return $this;
     }
 
 
@@ -286,46 +327,6 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     }
 
 
-    //      -               -               -              getter & setter CITY ID               -               -               -
-    /**
-     * Get the id of the city the user lives in
-     */
-    public function getCityId(): ?city
-    {
-        return $this->cityId;
-    }
-
-    /**
-     * Set the id of the city the user lives in
-     */
-    public function setCityId(?city $cityId): self
-    {
-        $this->cityId = $cityId;
-
-        return $this;
-    }
-
-
-    //      -               -               -              getter & setter COUNTRY ID               -               -               -
-    /**
-     * Get the id of the country the user lives in
-     */
-    public function getCountryId(): ?country
-    {
-        return $this->countryId;
-    }
-
-    /**
-     * Set the id of the country the user lives in
-     */
-    public function setCountryId(?country $countryId): self
-    {
-        $this->countryId = $countryId;
-
-        return $this;
-    }
-
-
     //      -               -               -              getter & setter DISPLAY NAME               -               -               -
     /**
      * Get the display name of the user
@@ -386,26 +387,6 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     }
 
 
-    //      -               -               -              getter & setter REGKEY               -               -               -
-    /**
-     * Get the regkey for the user
-     */
-    public function getRegkey(): ?string
-    {
-        return $this->regkey;
-    }
-
-    /**
-     * Set the regkey for the user
-     */
-    public function setRegkey(string $regkey): self
-    {
-        $this->regkey = $regkey;
-
-        return $this;
-    }
-
-
     //      -               -               -              getter & setter CREATED AT               -               -               -
     /**
      * Get the time when the user made their account
@@ -427,6 +408,26 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     }
 
 
+    //      -               -               -              getter & setter REGKEY               -               -               -
+    /**
+     * Get the regkey for the user
+     */
+    public function getRegkey(): ?string
+    {
+        return $this->regkey;
+    }
+
+    /**
+     * Set the regkey for the user
+     */
+    public function setRegkey(string $regkey): self
+    {
+        $this->regkey = $regkey;
+
+        return $this;
+    }
+
+
     //      __________________________________________________________________________________
     //                                                                        R E L A T I O N S
     //      __________________________________________________________________________________
@@ -444,7 +445,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     {
         if (!$this->images->contains($image)) {
             $this->images[] = $image;
-            $image->setUserId($this);
+            $image->setUser($this);
         }
 
         return $this;
@@ -455,8 +456,8 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
         if ($this->images->contains($image)) {
             $this->images->removeElement($image);
             // set the owning side to null (unless already changed)
-            if ($image->getUserId() === $this) {
-                $image->setUserId(null);
+            if ($image->getUser() === $this) {
+                $image->setUser(null);
             }
         }
 
@@ -477,7 +478,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     {
         if (!$this->reviews->contains($review)) {
             $this->reviews[] = $review;
-            $review->setUserId($this);
+            $review->setUser($this);
         }
 
         return $this;
@@ -488,8 +489,8 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
         if ($this->reviews->contains($review)) {
             $this->reviews->removeElement($review);
             // set the owning side to null (unless already changed)
-            if ($review->getUserId() === $this) {
-                $review->setUserId(null);
+            if ($review->getUser() === $this) {
+                $review->setUser(null);
             }
         }
 

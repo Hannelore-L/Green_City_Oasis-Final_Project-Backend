@@ -62,7 +62,7 @@ class Image
      * @ORM\JoinColumn(nullable=false)
      * @Groups( { "image:read" , "image:write" } )
      */
-    private $userId;
+    private $user;
 
 
 //    //      -               -               -               L O C A T I O N   I D               -               -               -
@@ -73,7 +73,7 @@ class Image
      * @ORM\JoinColumn(nullable=false)
      * @Groups( { "image:read", "image:write" } )
      */
-    private $locationId;
+    private $location;
 
 
     //      -               -               -               N A M E               -               -               -
@@ -140,7 +140,7 @@ class Image
 
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
+        $this->uploadedAt = new \DateTimeImmutable();
     }
 
 
@@ -158,17 +158,17 @@ class Image
     /**
      * Get the id of the user uploading the image
      */
-    public function getUserId(): ?user
+    public function getUser(): ?user
     {
-        return $this->userId;
+        return $this->user;
     }
 
     /**
      * Set the id of the user uploading the image
      */
-    public function setUserId(?user $userId): self
+    public function setUser(?user $user): self
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
@@ -178,17 +178,17 @@ class Image
     /**
      * Get the id of the location the image is of
      */
-    public function getLocationId(): ?location
+    public function getLocation(): ?location
     {
-        return $this->locationId;
+        return $this->location;
     }
 
     /**
      * Set the id of the location the image is of
      */
-    public function setLocationId(?location $locationId): self
+    public function setLocation(?location $location): self
     {
-        $this->locationId = $locationId;
+        $this->location = $location;
 
         return $this;
     }
@@ -249,9 +249,9 @@ class Image
      * @Groups( { "image:read" } )
      * @SerializedName( "uploadedAt" )
      */
-    public function getCreatedAtAgo(): string
+    public function getUploadedAtAgo(): string
     {
-        return Carbon::instance( $this->getCreatedAt() )->diffForHumans();
+        return Carbon::instance( $this->getUploadedAt() )->diffForHumans();
     }
 
 

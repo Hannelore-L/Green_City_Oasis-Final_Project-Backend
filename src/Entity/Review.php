@@ -61,7 +61,7 @@ class Review
      * @ORM\JoinColumn(nullable=false)
      * @Groups( { "review:read", "review:write" } )
      */
-    private $locationId;
+    private $location;
 
 
     //      -               -               -               U S E R   I D               -               -               -
@@ -72,7 +72,7 @@ class Review
      * @ORM\JoinColumn(nullable=false)
      * @Groups( { "review:read", "review:write" } )
      */
-    private $userId;
+    private $user;
 
 
     //      -               -               -               R A T I N G               -               -               -
@@ -148,17 +148,17 @@ class Review
     /**
      * Get the location the review belongs to
      */
-    public function getLocationId(): ?location
+    public function getLocation(): ?location
     {
-        return $this->locationId;
+        return $this->location;
     }
 
     /**
      * Set the location the review belongs to
      */
-    public function setLocationId(?location $locationId): self
+    public function setLocation(?location $location): self
     {
-        $this->locationId = $locationId;
+        $this->location = $location;
 
         return $this;
     }
@@ -168,17 +168,17 @@ class Review
     /**
      * Get the user that wrote the review
      */
-    public function getUserId(): ?user
+    public function getUser(): ?user
     {
-        return $this->userId;
+        return $this->user;
     }
 
     /**
      * Set the user that wrote the review
      */
-    public function setUserId(?user $userId): self
+    public function setUser(?user $user): self
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
@@ -278,5 +278,4 @@ class Review
 
         return $this;
     }
-
 }

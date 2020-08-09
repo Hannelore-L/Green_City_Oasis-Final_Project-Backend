@@ -26,7 +26,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     collectionOperations={ "get" },
  *     itemOperations={ "get" },
- *     normalizationContext={ "groups" = { "tag:read" }, "swagger_definition_name" = "Read" }
+ *     normalizationContext={ "groups" = { "event:read" }, "swagger_definition_name" = "Read" }
  * )
  * @ORM\Entity(repositoryClass=EventRepository::class)
  * @ApiFilter( SearchFilter::class, properties={ "name" : "partial" } )
@@ -44,7 +44,7 @@ class Event
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups( { "tag:read" } )
+     * @Groups( { "event:read" } )
      */
     private $id;
 
@@ -54,7 +54,7 @@ class Event
      * The name of the event
      *
      * @ORM\Column(type="string", length=255)
-     * @Groups( { "tag:read" } )
+     * @Groups( { "event:read" } )
      */
     private $name;
 
@@ -64,7 +64,7 @@ class Event
      * The short description of the event
      *
      * @ORM\Column(type="text")
-     * @Groups( { "tag:read" } )
+     * @Groups( { "event:read" } )
      */
     private $description;
 
@@ -74,7 +74,7 @@ class Event
      * The link to the official event page, if this exists
      *
      * @ORM\Column(type="string", length=512, nullable=true)
-     * @Groups( { "tag:read" } )
+     * @Groups( { "event:read" } )
      */
     private $link;
 
@@ -84,7 +84,7 @@ class Event
      * The start date of the event
      *
      * @ORM\Column(type="date")
-     * @Groups( { "tag:read" } )
+     * @Groups( { "event:read" } )
      */
     private $startDate;
 
@@ -94,7 +94,7 @@ class Event
      * The end date of the event
      *
      * @ORM\Column(type="date")
-     * @Groups( { "tag:read" } )
+     * @Groups( { "event:read" } )
      */
     private $endDate;
 
@@ -104,7 +104,7 @@ class Event
      * The start time of the event
      *
      * @ORM\Column(type="time")
-     * @Groups( { "tag:read" } )
+     * @Groups( { "event:read" } )
      */
     private $startTime;
 
@@ -114,7 +114,7 @@ class Event
      * The end time of the event
      *
      * @ORM\Column(type="time")
-     * @Groups( { "tag:read" } )
+     * @Groups( { "event:read" } )
      */
     private $endTime;
 
@@ -126,12 +126,13 @@ class Event
     //      -               -               -               L O C A T I O N   I D               -               -               -
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Location", inversedBy="events")
+     * @Groups( { "event:read" } )
      */
-    private $locationId;
+    private $location;
 
     public function __construct()
     {
-        $this->locationId = new ArrayCollection();
+        $this->location = new ArrayCollection();
     }
 
 
@@ -297,24 +298,24 @@ class Event
     /**
      * @return Collection|location[]
      */
-    public function getLocationId(): Collection
+    public function getLocation(): Collection
     {
-        return $this->locationId;
+        return $this->location;
     }
 
-    public function addLocationId(location $locationId): self
+    public function addLocation(location $location): self
     {
-        if (!$this->locationId->contains($locationId)) {
-            $this->locationId[] = $locationId;
+        if (!$this->location->contains($location)) {
+            $this->location[] = $location;
         }
 
         return $this;
     }
 
-    public function removeLocationId(location $locationId): self
+    public function removeLocation(location $location): self
     {
-        if ($this->locationId->contains($locationId)) {
-            $this->locationId->removeElement($locationId);
+        if ($this->location->contains($location)) {
+            $this->location->removeElement($location);
         }
 
         return $this;

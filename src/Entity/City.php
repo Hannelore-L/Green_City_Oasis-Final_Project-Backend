@@ -55,7 +55,7 @@ class City
      * @ORM\JoinColumn(nullable=false)
      * @Groups( { "city:read" } )
      */
-    private $countryId;
+    private $country;
 
     //      -               -               -               Z I P               -               -               -
     /**
@@ -93,7 +93,8 @@ class City
 
     //      -               -               -               U S E R S               -               -               -
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="cityId")
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="city")
+     * @Groups( { "city:read" } )
      */
     private $users;
 
@@ -123,17 +124,17 @@ class City
     /**
      * Get the id of the country this city belongs to
      */
-    public function getCountryId(): ?country
+    public function getCountry(): ?country
     {
-        return $this->countryId;
+        return $this->country;
     }
 
     /**
      * Set the id of the country this city belongs to
      */
-    public function setCountryId(?country $countryId): self
+    public function setCountry(?country $country): self
     {
-        $this->countryId = $countryId;
+        $this->country = $country;
 
         return $this;
     }
@@ -216,7 +217,7 @@ class City
     {
         if (!$this->users->contains($user)) {
             $this->users[] = $user;
-            $user->setCityId($this);
+            $user->setCity($this);
         }
 
         return $this;
@@ -227,8 +228,8 @@ class City
         if ($this->users->contains($user)) {
             $this->users->removeElement($user);
             // set the owning side to null (unless already changed)
-            if ($user->getCityId() === $this) {
-                $user->setCityId(null);
+            if ($user->getCity() === $this) {
+                $user->setCity(null);
             }
         }
 

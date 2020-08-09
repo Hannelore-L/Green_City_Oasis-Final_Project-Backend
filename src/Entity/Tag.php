@@ -62,12 +62,13 @@ class Tag
     //      -               -               -               L O C A T I O N   I D               -               -               -
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Location", inversedBy="tags")
+     * @Groups( { "tag:read" } )
      */
-    private $locationId;
+    private $location;
 
     public function __construct()
     {
-        $this->locationId = new ArrayCollection();
+        $this->location = new ArrayCollection();
     }
 
 
@@ -104,24 +105,24 @@ class Tag
     /**
      * @return Collection|location[]
      */
-    public function getLocationId(): Collection
+    public function getLocation(): Collection
     {
-        return $this->locationId;
+        return $this->location;
     }
 
-    public function addLocationId(location $locationId): self
+    public function addLocation(location $location): self
     {
-        if (!$this->locationId->contains($locationId)) {
-            $this->locationId[] = $locationId;
+        if (!$this->location->contains($location)) {
+            $this->location[] = $location;
         }
 
         return $this;
     }
 
-    public function removeLocationId(location $locationId): self
+    public function removeLocation(location $location): self
     {
-        if ($this->locationId->contains($locationId)) {
-            $this->locationId->removeElement($locationId);
+        if ($this->location->contains($location)) {
+            $this->location->removeElement($location);
         }
 
         return $this;

@@ -62,13 +62,13 @@ class Country
 
     //      -               -               -               U S E R S               -               -               -
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="countryId")
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="country")
      */
     private $users;
 
     //      -               -               -               C I T I E S               -               -               -
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\City", mappedBy="countryId")
+     * @ORM\OneToMany(targetEntity="App\Entity\City", mappedBy="country")
      */
     private $cities;
 
@@ -132,7 +132,7 @@ class Country
     {
         if (!$this->users->contains($user)) {
             $this->users[] = $user;
-            $user->setCountryId($this);
+            $user->setCountry($this);
         }
 
         return $this;
@@ -143,8 +143,8 @@ class Country
         if ($this->users->contains($user)) {
             $this->users->removeElement($user);
             // set the owning side to null (unless already changed)
-            if ($user->getCountryId() === $this) {
-                $user->setCountryId(null);
+            if ($user->getCountry() === $this) {
+                $user->setCountry(null);
             }
         }
 
@@ -164,7 +164,7 @@ class Country
     {
         if (!$this->cities->contains($city)) {
             $this->cities[] = $city;
-            $city->setCountryId($this);
+            $city->setCountry($this);
         }
 
         return $this;
@@ -175,8 +175,8 @@ class Country
         if ($this->cities->contains($city)) {
             $this->cities->removeElement($city);
             // set the owning side to null (unless already changed)
-            if ($city->getCountryId() === $this) {
-                $city->setCountryId(null);
+            if ($city->getCountry() === $this) {
+                $city->setCountry(null);
             }
         }
 

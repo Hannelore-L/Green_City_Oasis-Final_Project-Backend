@@ -1,3 +1,11 @@
-login_check_path:
-  path:     /api/login_check
-  methods:  [POST]
+user_login_path:
+      path:     /api/login
+      methods:  [POST]
+
+app_logout:
+      path: /gco_admin/app_logout
+      methods: ['GET']
+      controller: App\Controller\HomeController::logout
+app_login:
+      path: /gco_admin/login
+      controller: App\Controller\SecurityController::login

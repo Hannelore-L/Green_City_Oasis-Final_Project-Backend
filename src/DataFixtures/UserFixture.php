@@ -46,6 +46,11 @@ class UserFixture extends BaseFixture
             $user->setEmail(sprintf('test@example.com', $i));
             $user->setPassword($this->passwordEncoder->encodePassword($user, 'authenticate'));
             $user->setRoles([]);
+            $user->setDisplayName("test");
+            $user->setFirstName("Tete");
+            $user->setLastName("Stst");
+            $user->setRegkey(11111);
+
 
             return $user;
         });

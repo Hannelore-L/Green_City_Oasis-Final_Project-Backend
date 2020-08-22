@@ -1,0 +1,493 @@
+easy_admin:
+      #      __________________________________________________________________________________
+      #                                                                        A P P E A R A N C E
+      #      __________________________________________________________________________________
+
+      # what name or logo is showing at the top of the admin page
+      site_name: '<img src="https://cdn.discordapp.com/attachments/460847857361092608/746006196196212766/Logo_zwarte_achtergrond.png" alt="Green City Oasis Admin Page" width="100">'
+
+      design:
+            # the accent colour
+            brand_color: ' rgb( 69, 89, 39 )'
+
+#            assets:
+#                  css: ['css/easy_admin.css']
+
+
+      #      __________________________________________________________________________________
+      #                                                                        M E N U
+      #      __________________________________________________________________________________
+
+            menu:
+                  -     { label: 'Locatie gebonden' }
+                  -     { entity: 'Location', label: 'Locaties', icon: 'leaf' }
+                  -     { entity: 'Image', label: 'Foto''s', icon: 'images' }
+                  -     { entity: 'Review', label: 'Reviews', icon: 'search-location' }
+
+                  -     { label: 'Tijds gebonden' }
+                  -     { entity: 'Event', label: 'Events', icon: 'calendar-alt' }
+
+                  -     { label: 'Gebruikers' }
+                  -     { entity: 'User', label: 'Gebruikers', icon: 'users' }
+
+                  -     { label: 'Statisch' }
+                  -     { entity: 'Tag', label: 'Labels', icon: 'tags' }
+                  -     { entity: 'City', label: 'Steden', icon: 'city', params: { sortField: 'id', sortDirection: 'ASC' } }
+                  -     { entity: 'Country', label: 'Landen', icon: 'globe-europe', params: { sortField: 'id', sortDirection: 'ASC' }  }
+
+      formats:
+            date:     'l j F Y'                       # l = text of weekdays        j = numeric day o/t month without leading 0       F = text of months       Y = text of the year
+            time:     'H:i e'                             # H = 24 format with leading 0            i = minutes with leading 0
+            datetime: 'd/m/Y H:i:s e'       # d = numeric day o/t month with leading 0        m = numeric month with leading 0        s = seconds with leading 0
+
+
+      #      __________________________________________________________________________________
+      #                                                                        E N T I T I E S
+      #      __________________________________________________________________________________
+
+      entities:
+
+            #      -               -               -               L O C A T I O N               -               -               -
+            Location:
+                  class: App\Entity\Location
+
+                  #     M E N U
+                  list:
+                        title: 'Locaties'
+
+                        actions:
+                              -     { name: 'new', icon: 'plus-circle', label: 'Nieuwe locatie aanmaken...' }
+                              -     { name: 'show', icon: 'info-circle', label: '' }
+                              -     { name: 'edit', icon: 'pencil', label: '' }
+                              -     { name: 'delete', icon: 'trash', label: '' }
+
+                        fields:
+                              -     { property: 'isDeleted', label: 'Is Verwijderd' }
+                              -     id
+                              -     { property: 'name', label: 'Naam' }
+                              -     { property: 'uniqueProperty', label: 'Unieke Eigenschap' }
+                              -     { property: 'addressText', label: 'Adres tekst' }
+                              -     { property: 'addressInfo', label: 'Adres Info' }
+                              -     { property: 'description', label: 'Omschrijving' }
+                              -     { property: 'createdAt', label: 'Aangemaakt Op', type: 'datetime', type_options: { view_timezone: 'Europe/Brussels', model_timezone: 'GMT+1' } }
+                              -     { property: 'tags', label: 'Labels' }
+                              -     { property: 'events', label: 'Events ' }
+                              -     { property: 'images', label: 'Foto''s' }
+                              -     { property: 'reviews', label: 'Reviews' }
+
+                        filters: [ 'isDeleted', 'createdAt' ]
+
+                  #     F O R M
+                  form:
+                        fields:
+                              -     { type: 'group', icon: 'pencil', label: 'Basis Informatie', css_class: 'col-lg-7' }
+                              -     { property: 'name', label: 'Naam' }
+                              -     { property: 'uniqueProperty', label: 'Unieke Eigenschap' }
+                              -     { property: 'addressText', label: 'Adres tekst' }
+                              -     { property: 'addressInfo', label: 'Adres Info' }
+                              -     { property: 'description', label: 'Omschrijving', type: 'text_editor' }
+                              -     { property: 'isDeleted', label: 'Is Verwijderd' }
+                              -     { type: 'group', icon: 'th-list', label: 'Relaties', css_class: 'col-lg-5' }
+                              -     { property: 'tags', label: 'Labels' }
+
+                  #     N E W
+                  new:
+                        title: 'Maak een nieuwe locatie aan'
+
+                  #     E D I T
+                  edit:
+                        title: 'Wijzig Locatie met id %%entity_id%%'
+
+                  #     S H O W
+                  show:
+                        title: 'Informatie over Location met id %%entity_id%%'
+                        fields:
+                              -     id
+                              -     { property: 'name', label: 'Naam' }
+                              -     { property: 'uniqueProperty', label: 'Unieke Eigenschap' }
+                              -     { property: 'addressText', label: 'Adres tekst' }
+                              -     { property: 'addressInfo', label: 'Adres Info' }
+                              -     { property: 'description', label: 'Omschrijving', type: 'raw' }
+                              -     { property: 'createdAt', label: 'Aangemaakt Op', type: 'datetime', type_options: { view_timezone: 'Europe/Brussels', model_timezone: 'GMT+1' } }
+                              -     { property: 'isDeleted', label: 'Is Verwijderd' }
+                              -     { property: 'tags', label: 'Labels' }
+                              -     { property: 'events', label: 'Events ' }
+                              -     { property: 'images', label: 'Foto''s' }
+                              -     { property: 'reviews', label: 'Reviews' }
+
+
+                        #      -               -               -               I M A G E               -               -               -
+            Image:
+                  class: App\Entity\Image
+
+                  #     M E N U
+                  list:
+                        title: 'Foto''s'
+                        actions:
+                              -     { name: 'new', icon: 'plus-circle', label: 'Nieuwe afbeelding opladen...' }
+                              -      { name: 'show', icon: 'info-circle', label: '' }
+                              -     { name: 'edit', icon: 'pencil', label: '' }
+                              -     { name: 'delete', icon: 'trash', label: '' }
+
+                        fields:
+                              -     { property: 'isDeleted', label: 'Is Verwijderd' }
+                              -     id
+                              -     { property: 'name', label: 'Naam' }
+                              -     { property: 'fileName', label: 'Bestandsnaam' }
+                              -     { property: 'coordinates', label: 'Coördinaten' }
+                              -     { property: 'uploadedAt', label: 'Opgeladen Op', type: 'datetime', type_options: { view_timezone: 'Europe/Brussels', model_timezone: 'GMT+1' } }
+                              -     { property: 'location', label: 'Locatie' }
+                              -     { property: 'user', label: 'Gebruiker' }
+
+                        filters: [ 'isDeleted', 'uploadedAt', 'user', 'location' ]
+
+                  #     F O R M
+                  form:
+                        fields:
+                              -     { type: 'group', icon: 'pencil', label: 'Basis Informatie', css_class: 'col-lg-7' }
+                              -     { property: 'name', label: 'Naam' }
+                              -     { property: 'fileName', label: 'Bestandsnaam' }
+                              -     { property: 'coordinates', label: 'Coördinaten' }
+                              -     { property: 'isDeleted', label: 'Is Verwijderd' }
+                              -     { type: 'group', icon: 'th-list', label: 'Relaties', css_class: 'col-lg-5' }
+                              -     { property: 'location', label: 'Locatie' }
+
+                  #     N E W
+                  new:
+                        title: 'Laad een nieuwe foto op'
+
+                  #     E D I T
+                  edit:
+                        title: 'Wijzig Foto met id %%entity_id%%'
+
+                  #     S H O W
+                  show:
+                        title: 'Informatie over Foto met id %%entity_id%%'
+                        fields:
+                              -     id
+                              -     { property: 'name', label: 'Naam' }
+                              -     { property: 'fileName', label: 'Bestandsnaam' }
+                              -     { property: 'coordinates', label: 'Coördinaten' }
+                              -     { property: 'uploadedAt', label: 'Opgeladen Op', type: 'datetime', type_options: { view_timezone: 'Europe/Brussels', model_timezone: 'GMT+1' } }
+                              -     { property: 'isDeleted', label: 'Is Verwijderd' }
+                              -     { property: 'location', label: 'Locatie' }
+                              -     { property: 'user', label: 'Gebruiker' }
+
+
+            #      -               -               -               R E V I E W               -               -               -
+            Review:
+                  class: App\Entity\Review
+
+                  #     M E N U
+                  list:
+                        title: 'Reviews'
+                        actions:
+                              -     '-new'
+                              -     { name: 'show', icon: 'info-circle', label: '' }
+                              -     { name: 'edit', icon: 'pencil', label: '' }
+                              -     { name: 'delete', icon: 'trash', label: '' }
+
+                        fields:
+                              -     { property: 'isDeleted', label: 'Is Verwijderd' }
+                              -     id
+                              -     { property: 'rating', label: 'Beoordeling' }
+                              -     { property: 'description', label: 'Omschrijving' }
+                              -     { property: 'createdAt', label: 'Aangemaakt Op', type: 'datetime', type_options: { view_timezone: 'Europe/Brussels', model_timezone: 'GMT+1' } }
+                              -     { property: 'user', label: 'Gebruiker' }
+                              -     { property: 'location', label: 'Locatiie' }
+
+                        filters: [ 'isDeleted', 'createdAt', 'rating', 'location', 'user' ]
+
+                  #     E D I T
+                  edit:
+                        title: 'Wijzig Review met id %%entity_id%%'
+                        fields:
+                              -     { type: 'group', icon: 'pencil', label: 'Basis Informatie', css_class: 'col-lg-7' }
+                              -     { property: 'rating', label: 'Beoordeling' }
+                              -     { property: 'description', label: 'Omschrijving', type: 'text_editor' }
+                              -     { property: 'isDeleted', label: 'Is Verwijderd' }
+                              -     { type: 'group', icon: 'th-list', label: 'Relaties', css_class: 'col-lg-5' }
+                              -     { property: 'location', label: 'Locatiie' }
+
+                  #     S H O W
+                  show:
+                        title: 'Weergeven Review met id %%entity_id%%'
+                        fields:
+                              -     id
+                              -     { property: 'rating', label: 'Beoordeling' }
+                              -     { property: 'description', label: 'Omschrijving', type: 'raw' }
+                              -     { property: 'createdAt', label: 'Aangemaakt Op', type: 'datetime', type_options: { view_timezone: 'Europe/Brussels', model_timezone: 'GMT+1' } }
+                              -     { property: 'isDeleted', label: 'Is Verwijderd' }
+                              -     { property: 'user', label: 'Gebruiker' }
+                              -     { property: 'location', label: 'Locatiie' }
+
+
+            #      -               -               -               E V E N T               -               -               -
+            Event:
+                  class: App\Entity\Event
+
+                  #     M E N U
+                  list:
+                        title: 'Events'
+
+                        actions:
+                              -     { name: 'new', icon: 'plus-circle', label: 'Nieuwe event aanmaken...' }
+                              -     { name: 'show', icon: 'info-circle', label: '' }
+                              -     { name: 'edit', icon: 'pencil', label: '' }
+                              -     { name: 'delete', icon: 'trash', label: '' }
+
+                        fields:
+                              -     id
+                              -     { property: 'name', label: 'Naam' }
+                              -     { property: 'description', label: 'Omschrijving' }
+                              -     { property: 'link', label: 'Link', type: 'url'}
+                              -     { property: 'startDate', label: 'Start Datum' }
+                              -     { property: 'endDate', label: 'Eind Datum' }
+                              -     { property: 'startTime', label: 'Start tijd' }
+                              -     { property: 'endTime', label: 'Eind tijd' }
+                              -     { property: 'location', label: 'Locatie' }
+
+                        filters: [ 'startDate', 'endDate', 'startTime', 'endTime', 'location' ]
+
+                  #     F O R M
+                  form:
+                        fields:
+                              -     { type: 'group', icon: 'pencil', label: 'Basis Informatie', css_class: 'col-lg-7' }
+                              -     { property: 'name', label: 'Naam' }
+                              -     { property: 'description', label: 'Omschrijving', type: 'text_editor' }
+                              -     { property: 'link', label: 'Link', type: 'url'}
+                              -     { property: 'startDate', label: 'Start Datum' }
+                              -     { property: 'endDate', label: 'Eind Datum' }
+                              -     { property: 'startTime', label: 'Start tijd' }
+                              -     { property: 'endTime', label: 'Eind tijd' }
+                              -     { type: 'group', icon: 'th-list', label: 'Relaties', css_class: 'col-lg-5' }
+                              -     { property: 'location', label: 'Locatie' }
+
+                  #     N E W
+                  new:
+                        title: 'Maak een nieuwe Event aan'
+
+                  #     E D I T
+                  edit:
+                        title: 'Wijzig Event met id  %%entity_id%%'
+
+                  #     S H O W
+                  show:
+                        title: 'Informatie over Event met id %%entity_id%%'
+                        fields:
+                              -     id
+                              -     { property: 'name', label: 'Naam' }
+                              -     { property: 'description', label: 'Omschrijving', type: 'raw' }
+                              -     { property: 'link', label: 'Link', type: 'url'}
+                              -     { property: 'startDate', label: 'Start Datum' }
+                              -     { property: 'endDate', label: 'Eind Datum' }
+                              -     { property: 'startTime', label: 'Start tijd' }
+                              -     { property: 'endTime', label: 'Eind tijd' }
+                              -     { property: 'location', label: 'Locatie' }
+
+
+            #      -               -               -               U S E R               -               -               -
+            User:
+                  class: App\Entity\User
+
+                  #     M E N U
+                  list:
+                        title: 'Gebruikers'
+
+                        actions:
+                              -     { name: 'new', icon: 'plus-circle', label: 'Nieuwe gebruiker aanmaken...' }
+                              -     { name: 'show', icon: 'info-circle', label: '' }
+                              -     { name: 'edit', icon: 'pencil', label: '' }
+                              -     { name: 'delete', icon: 'trash', label: '' }
+
+                        fields:
+                              -     id
+                              -     { property: 'email', label: 'E-mail', type: 'email' }
+                              -     { property: 'roles', label: 'Rollen' }
+                              -     { property: 'displayName', label: 'Gebruikersnaam' }
+                              -     { property: 'firstName', label: 'Voornaam' }
+                              -     { property: 'lastName', label: 'Achternaam' }
+                              -     { property: 'createdAt', label: 'Aangemaakt op' }
+                              -     { property: 'displayName', label: 'Gebruikersnaam' }
+                              -     { property: 'city', label: 'Stad' }
+                              -     { property: 'country', label: 'Land' }
+                              -     { property: 'images', label: 'Foto''s' }
+                              -     { property: 'reviews', label: 'Reviews' }
+
+                        filters: [ 'createdAt', 'city', 'country' ]
+
+                  #     F O R M
+                  form:
+                        fields:
+                              -     { type: 'group', icon: 'pencil', label: 'Basis Informatie', css_class: 'col-lg-7' }
+                              -     { property: 'email', label: 'E-mail', type: 'email' }
+                              -     { property: 'password', label: 'Wachtwoord' }
+                              -     { property: 'roles', label: 'Rollen' }
+                              -     { property: 'displayName', label: 'Gebruikersnaam' }
+                              -     { property: 'firstName', label: 'Voornaam' }
+                              -     { property: 'lastName', label: 'Achternaam' }
+                              -     { property: 'createdAt', label: 'Aangemaakt op' }
+                              -     { property: 'displayName', label: 'Gebruikersnaam' }
+                              -     { type: 'group', icon: 'th-list', label: 'Relaties', css_class: 'col-lg-5' }
+                              -     { property: 'city', label: 'Stad' }
+                              -     { property: 'country', label: 'Land' }
+
+                  #     N E W
+                  new:
+                        title: 'Maak een nieuwe gebruiker aan'
+
+                  #     E D I T
+                  edit:
+                        title: 'Wijzig gebruiker met id %%entity_id%%'
+                        fields:
+                              -     '-password'
+
+                  #     S H O W
+                  show:
+                        title: 'Informatie over gebruiker met id %%entity_id%%'
+                        fields:
+                              -     id
+                              -     { property: 'email', label: 'E-mail', type: 'email' }
+                              -     { property: 'roles', label: 'Rollen' }
+                              -     { property: 'displayName', label: 'Gebruikersnaam' }
+                              -     { property: 'firstName', label: 'Voornaam' }
+                              -     { property: 'lastName', label: 'Achternaam' }
+                              -     { property: 'createdAt', label: 'Aangemaakt op' }
+                              -     { property: 'displayName', label: 'Gebruikersnaam' }
+                              -     { property: 'city', label: 'Stad' }
+                              -     { property: 'country', label: 'Land' }
+                              -     { property: 'images', label: 'Foto''s' }
+                              -     { property: 'reviews', label: 'Reviews' }
+
+
+
+            #      -               -               -               T A G               -               -               -
+            Tag:
+                  class: App\Entity\Tag
+
+                  #     M E N U
+                  list:
+                        title: 'Labels'
+                        help: 'Deze hoor je alleen aan te passen in geval van een typefout! Anders blijven de tags onveranderd.'
+
+                        actions:
+                              -     '-new'
+                              -     { name: 'show', icon: 'info-circle', label: '' }
+                              -     { name: 'edit', icon: 'pencil', label: '' }
+                              -     '-delete'
+
+                        fields:
+                              -     id
+                              -     { property: 'name', label: 'Naam' }
+                              -     { property: 'category', label: 'Categorie' }
+                              -     { property: 'location', label: 'Locaties' }
+
+                        filters: [ 'category', 'location' ]
+
+                  #     F O R M
+                  form:
+                        fields:
+                              -     { type: 'group', icon: 'pencil', label: 'Basis Informatie', css_class: 'col-lg-7' }
+                              -     { property: 'name', label: 'Naam' }
+                              -     { property: 'category', label: 'Categorie' }
+                              -     { type: 'group', icon: 'th-list', label: 'Relaties', css_class: 'col-lg-5' }
+                              -     { property: 'location', label: 'Locaties' }
+
+                  #     E D I T
+                  edit:
+                        title: 'Wijzig het label met id %%entity_id%%'
+
+                        actions:
+                              - '-delete'
+
+                        fields:
+                              -     '-location'
+
+                  #     S H O W
+                  show:
+                        title: 'Informatie over het label met id %%entity_id%%'
+
+                        actions:
+                              - '-delete'
+
+                        fields:
+                              -     id
+                              -     { property: 'name', label: 'Naam' }
+                              -     { property: 'category', label: 'Categorie' }
+                              -     { property: 'location', label: 'Locaties' }
+
+
+            #      -               -               -               C I T Y               -               -               -
+            City:
+                  class: App\Entity\City
+
+                  #     M E N U
+                  list:
+                        title: 'Steden'
+
+                        actions:
+                              -     '-new'
+                              -     { name: 'show', icon: 'info-circle', label: '' }
+                              -     '-edit'
+                              -     '-delete'
+
+                        fields:
+                              -     id
+                              -     { property: 'zip', label: 'Postcode' }
+                              -     { property: 'name', label: 'Plaatsnaam' }
+                              -     { property: 'province', label: 'Provincie' }
+                              -     { property: 'country', label: 'Land' }
+                              -     { property: 'users', label: 'Gebruikers' }
+
+                        filters: [ 'country' ]
+
+                  #     S H O W
+                  show:
+                        title: 'Informatie over  stad met id%%entity_id%%'
+
+                        actions:
+                              - '-edit'
+                              - '-delete'
+
+                        fields:
+                              -     id
+                              -     { property: 'zip', label: 'Postcode' }
+                              -     { property: 'name', label: 'Plaatsnaam' }
+                              -     { property: 'province', label: 'Provincie' }
+                              -     { property: 'country', label: 'Land' }
+                              -     { property: 'users', label: 'Gebruikers' }
+
+
+            #      -               -               -               C O U N T R Y               -               -               -
+            Country:
+                  class: App\Entity\Country
+
+                  #     M E N U
+                  list:
+                        title: 'Landen'
+
+                        actions:
+                              -     '-new'
+                              -     { name: 'show', icon: 'info-circle', label: '' }
+                              -     '-edit'
+                              -     '-delete'
+
+                        fields:
+                              -     id
+                              -     { property: 'name', label: 'Naam van het land' }
+                              -     { property: 'cities', label: 'Steden' }
+                              -     { property: 'users', label: 'Gebruikers' }
+
+                  #     S H O W
+                  show:
+                        title: 'Informatie over land met id %%entity_name%%'
+
+                        actions:
+                              - '-edit'
+                              - '-delete'
+
+                        fields:
+                              -     id
+                              -     { property: 'name', label: 'Naam van het land' }
+                              -     { property: 'cities', label: 'Steden' }
+                              -     { property: 'users', label: 'Gebruikers' }

@@ -41,7 +41,7 @@ class Country
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups( { "country:read" } )
+     * @Groups( { "country:read", "user:read", "city:read" } )
      */
     private $id;
 
@@ -51,7 +51,7 @@ class Country
      * The name of the country
      *
      * @ORM\Column(type="string", length=255)
-     * @Groups( { "country:read" } )
+     * @Groups( { "country:read", "user:read", "city:read" } )
      */
     private $name;
 
@@ -62,13 +62,19 @@ class Country
 
     //      -               -               -               U S E R S               -               -               -
     /**
+     * The users that live in this country
+     *
      * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="country")
+     * @Groups( { "country:read" } )
      */
     private $users;
 
     //      -               -               -               C I T I E S               -               -               -
     /**
+     * The cities that are located in this country
+     *
      * @ORM\OneToMany(targetEntity="App\Entity\City", mappedBy="country")
+     * @Groups( { "country:read" } )
      */
     private $cities;
 
@@ -182,4 +188,13 @@ class Country
 
         return $this;
     }
+
+
+      //      __________________________________________________________________________________
+      //                                                                        E A S Y   A D M I N
+      //      __________________________________________________________________________________
+      public function __toString()
+      {
+            return $this->name;
+      }
 }

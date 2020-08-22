@@ -12,7 +12,6 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\ImageRepository;
 use Carbon\Carbon;
@@ -34,8 +33,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity(repositoryClass=ImageRepository::class)
  * @ApiFilter( BooleanFilter::class, properties={ "isDeleted" } )
- * @ApiFilter( NumericFilter::class, properties={ "userId" , "locationId" } )
- * @ApiFilter( SearchFilter::class, properties={ "name" : "partial" } )
+ * @ApiFilter( SearchFilter::class, properties={
+ *       "name" : "partial",
+ *       "user" : "exact",
+ *       "location" : "exact"
+ * } )
  */
 class Image
 {
@@ -50,7 +52,7 @@ class Image
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups( { "image:read" } )
+     * @Groups(  { "image:read", "location:read", "user:read" } )
      */
     private $id;
 
@@ -60,7 +62,7 @@ class Image
      * The id of the user uploading the image
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="images")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups( { "image:read" , "image:write" } )
+     * @Groups(  { "image:read" } )
      */
     private $user;
 
@@ -71,7 +73,7 @@ class Image
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="images")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups( { "image:read", "image:write" } )
+     * @Groups(  { "image:read" } )
      */
     private $location;
 
@@ -81,7 +83,7 @@ class Image
      * The name of the image
      *
      * @ORM\Column(type="string", length=255)
-     * @Groups( { "image:read", "image:write" } )
+     * @Groups( { "image:read", "image:write", "location:read", "user:read" } )
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min=2,
@@ -98,8 +100,7 @@ class Image
      * The name of the file of the image
      *
      * @ORM\Column(type="string", length=512)
-     * @Groups( { "image:write" } )
-
+     * @Groups( { "image:read", "image:write", "location:read", "user:read" } )
      */
     private $fileName;
 
@@ -117,8 +118,8 @@ class Image
     /**
      * The coordinates of the image taken (estimate)
      *
-     * @ORM\Column(type="string", length=255)
-     * @Groups( { "image:read" } )
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups( { "image:read", "location:read", "user:read" } )
      */
     private $coordinates;
 
@@ -127,7 +128,7 @@ class Image
     /**
      * Whether or not the image is visual on the website
      * @ORM\Column(type="boolean")
-     * @Groups( { "image:read", "image:write" } )
+     * @Groups( { "image:read", "image:write", "location:read", "user:read" } )
      */
     private $isDeleted = false;
 
@@ -246,7 +247,7 @@ class Image
     /**
      * Get then the image was uploaded, written as time ago
      *
-     * @Groups( { "image:read" } )
+     * @Groups( { "image:read", "location:read", "user:read" } )
      * @SerializedName( "uploadedAt" )
      */
     public function getUploadedAtAgo(): string
@@ -293,4 +294,13 @@ class Image
 
         return $this;
     }
+
+
+      //      __________________________________________________________________________________
+      //                                                                        E A S Y   A D M I N
+      //      __________________________________________________________________________________
+      public function __toString()
+      {
+            return $this->name;
+      }
 }

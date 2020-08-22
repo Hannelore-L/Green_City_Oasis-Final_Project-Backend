@@ -32,7 +32,12 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
  * )
  * @ORM\Entity(repositoryClass=LocationRepository::class)
  * @ApiFilter( BooleanFilter::class, properties={ "isDeleted" } )
- * @ApiFilter( SearchFilter::class, properties={ "name" : "partial" , "addressText" : "partial"} )
+ * @ApiFilter( SearchFilter::class, properties={
+ *          "name" : "partial" ,
+ *          "addressText" : "partial",
+ *          "tags" : "exact",
+ *          "events" : "exact"
+ * } )
  */
 class Location
 {
@@ -47,7 +52,7 @@ class Location
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups( { "location:read" } )
+     * @Groups( { "location:read", "image:read", "review:read", "tag:read", "event:read" } )
      */
     private $id;
 
@@ -57,7 +62,7 @@ class Location
      * The name of the location
      *
      * @ORM\Column(type="string", length=255)
-     * @Groups( { "location:read" } )
+     * @Groups( { "location:read", "image:read", "review:read", "tag:read", "event:read" } )
      */
     private $name;
 
@@ -77,7 +82,7 @@ class Location
      * The address in text form, how it will show on the website
      *
      * @ORM\Column(type="string", length=255)
-     * @Groups( { "location:read" } )
+     * @Groups( { "location:read", "image:read", "review:read" } )
      */
     private $addressText;
 
@@ -87,7 +92,7 @@ class Location
      * The address information, what the map needs
      *
      * @ORM\Column(type="string", length=255)
-     * @Groups( { "location:read" } )
+     * @Groups( { "location:read", "image:read", "review:read" } )
      */
     private $addressInfo;
 
@@ -116,7 +121,7 @@ class Location
      * Whether or not the location has been visually deleted from the website
      *
      * @ORM\Column(type="boolean")
-     * @Groups( { "location:read" } )
+     * @Groups( { "location:read", "image:read", "review:read", "tag:read", "event:read" } )
      */
     private $isDeleted = false;
 
@@ -126,6 +131,8 @@ class Location
 
     //      -               -               -               I M A G E S               -               -               -
     /**
+     * The images of this location
+     *
      * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="location")
      * @Groups( { "location:read" } )
      */
@@ -133,6 +140,8 @@ class Location
 
     //      -               -               -               R E V I E W S               -               -               -
     /**
+     * The reviews about this location
+     *
      * @ORM\OneToMany(targetEntity="App\Entity\Review", mappedBy="location")
      * @Groups( { "location:read" } )
      */
@@ -141,6 +150,8 @@ class Location
 
     //      -               -               -               T A G S               -               -               -
     /**
+     * The tags belonging to this location
+     *
      * @ORM\ManyToMany(targetEntity="App\Entity\Tag", mappedBy="location")
      * @Groups( { "location:read" } )
      */
@@ -149,6 +160,8 @@ class Location
 
     //      -               -               -               E V E N T S               -               -               -
     /**
+     * The events hosted on this location
+     *
      * @ORM\ManyToMany(targetEntity="App\Entity\Event", mappedBy="location")
      * @Groups( { "location:read" } )
      */
@@ -301,6 +314,16 @@ class Location
         return Carbon::instance( $this->getCreatedAt() )->diffForHumans();
     }
 
+      /**
+       * Set when the entry of the location was created
+       */
+      public function setCreatedAt(\DateTimeInterface $createdAt): self
+      {
+            $this->createdAt = $createdAt;
+
+            return $this;
+      }
+
 
     //      -               -               -              getter & setter IS DELETED               -               -               -
     /**
@@ -447,4 +470,13 @@ class Location
 
         return $this;
     }
+
+
+      //      __________________________________________________________________________________
+      //                                                                        E A S Y   A D M I N
+      //      __________________________________________________________________________________
+      public function __toString()
+      {
+            return $this->name;
+      }
 }

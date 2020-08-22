@@ -29,7 +29,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     normalizationContext={ "groups" = { "tag:read" }, "swagger_definition_name" = "Read" }
  * )
  * @ORM\Entity(repositoryClass=TagRepository::class)
- * @ApiFilter( SearchFilter::class, properties={ "name" : "partial" } )
+ * @ApiFilter( SearchFilter::class, properties={
+ *       "name" : "partial",
+ *       "location" : "exact"
+ * } )
  */
 class Tag
 {
@@ -39,20 +42,34 @@ class Tag
 
     //      -               -               -               I D               -               -               -
     /**
+     * The id of the tag
+     *
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups( { "tag:read" } )
+     * @Groups( { "tag:read", "location:read" } )
      */
     private $id;
 
 
     //      -               -               -               N A M E               -               -               -
     /**
+     * The name of the tag
+     *
      * @ORM\Column(type="string", length=255)
-     * @Groups( { "tag:read" } )
+     * @Groups( { "tag:read", "location:read" } )
      */
     private $name;
+
+
+    //      -               -               -               C A T E G O R Y               -               -               -
+    /**
+     * The broader category the tag belongs to
+     *
+     * @ORM\Column(type="string", length=255)
+     * @Groups( { "tag:read", "location:read" } )
+     */
+    private $category;
 
 
     //      __________________________________________________________________________________
@@ -61,10 +78,20 @@ class Tag
 
     //      -               -               -               L O C A T I O N   I D               -               -               -
     /**
+     * The location that has these tags
+     *
      * @ORM\ManyToMany(targetEntity="App\Entity\Location", inversedBy="tags")
      * @Groups( { "tag:read" } )
      */
     private $location;
+
+
+
+    //      __________________________________________________________________________________
+    //                                                                        M E T H O D S
+    //      __________________________________________________________________________________
+
+    //      -               -               -              C O N S T R U C T O R               -               -               -
 
     public function __construct()
     {
@@ -72,11 +99,10 @@ class Tag
     }
 
 
-    //      __________________________________________________________________________________
-    //                                                                        M E T H O D S
-    //      __________________________________________________________________________________
-
     //      -               -               -              getter ID               -               -               -
+    /**
+     * Get the id of the tag
+     */
     public function getId(): ?int
     {
         return $this->id;
@@ -84,11 +110,18 @@ class Tag
 
 
     //      -               -               -              getter & setter NAME               -               -               -
+
+    /**
+     * Get the name of the tag
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * Set the name of the tag
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -96,6 +129,25 @@ class Tag
         return $this;
     }
 
+
+    //      -               -               -              getter & setter CATEGORY               -               -               -
+    /**
+     * Get the broader category the tag belongs to
+     */
+        public function getCategory(): ?string
+    {
+        return $this->category;
+    }
+
+    /**
+     * Set the broader category the tag belongs to
+     */
+    public function setCategory(string $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
 
     //      __________________________________________________________________________________
     //                                                                        R E L A T I O N S
@@ -127,4 +179,13 @@ class Tag
 
         return $this;
     }
+
+
+      //      __________________________________________________________________________________
+      //                                                                        E A S Y   A D M I N
+      //      __________________________________________________________________________________
+      public function __toString()
+      {
+            return $this->name;
+      }
 }

@@ -11,7 +11,7 @@ namespace App\Entity;
 //      __________________________________________________________________________________
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\UserRepository;
 use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -34,7 +34,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     denormalizationContext={ "groups" = { "user:write" }, "swagger_definition_name" = "Write" }
  * )
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ApiFilter( NumericFilter::class, properties={ "cityId" , "countryId" } )
+ * @ApiFilter( SearchFilter::class, properties={
+ *       "city" : "exact",
+ *        "country" : "exact"
+ * } )
  * @UniqueEntity( fields={ "email" } )
  * @UniqueEntity( fields={ "displayName" } )
  */
@@ -51,7 +54,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups( { "user:read" } )
+     * @Groups( { "user:read", "image:read", "review:read", "city:read", "country:read" } )
      */
     private $id;
 
@@ -62,7 +65,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\City", inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups( { "user:read", "user:write" } )
+     * @Groups( { "user:read", "user:write", "review:read" } )
      */
     private $city;
 
@@ -104,7 +107,8 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     /**
      * The role of the user
      *
-     * @ORM\Column(type="json", nullable=true)
+     * @ORM\Column(type="simple_array", nullable=true)
+     * @Groups( { "user:read", "image:read", "review:read", "city:read" } )
      */
     private $roles = array();
 
@@ -114,7 +118,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      * The display name of the user
      *
      * @ORM\Column(type="string", length=255)
-     * @Groups( { "user:read", "user:write" } )
+     * @Groups( { "user:read", "user:write", "image:read", "review:read", "city:read", "country:read" } )
      * @Assert\NotBlank()
      */
     private $displayName;
@@ -145,7 +149,6 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      * The time when the user made their account
      *
      * @ORM\Column(type="datetime")
-     * @Groups( { "user:read" } )
      */
     private $createdAt;
 
@@ -154,7 +157,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     /**
      * The regkey for the user
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $regkey;
 
@@ -165,6 +168,8 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
 
     //      -               -               -               I M A G E S               -               -               -
     /**
+     * The images uploaded by this user
+     *
      * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="user")
      * @Groups( { "user:read" } )
      */
@@ -172,6 +177,8 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
 
     //      -               -               -               R E V I E W S               -               -               -
     /**
+     * The reviews posted by this user
+     *
      * @ORM\OneToMany(targetEntity="App\Entity\Review", mappedBy="user")
      * @Groups( { "user:read" } )
      */
@@ -186,9 +193,11 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
 
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
-        $this->images = new ArrayCollection();
-        $this->reviews = new ArrayCollection();
+
+          $this->roles[] = 'ROLE_USER';
+          $this->createdAt = new \DateTimeImmutable();
+          $this->images = new ArrayCollection();
+          $this->reviews = new ArrayCollection();
     }
 
 
@@ -390,6 +399,8 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     //      -               -               -              getter & setter CREATED AT               -               -               -
     /**
      * Get the time when the user made their account
+     *
+     * @Groups( { "user:read", "image:read", "review:read", "city:read", "country:read" } )
      */
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -399,8 +410,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     /**
      * Get the time when the user made their account, written as time ago
      *
-     * @Groups( { "user:read" } )
-     * @SerializedName( "createdAt" )
+     * @Groups( { "user:read", "image:read", "review:read", "city:read", "country:read" } )
      */
     public function getCreatedAtAgo(): string
     {
@@ -496,4 +506,13 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
 
         return $this;
     }
+
+
+      //      __________________________________________________________________________________
+      //                                                                        E A S Y   A D M I N
+      //      __________________________________________________________________________________
+      public function __toString()
+      {
+            return $this->email;
+      }
 }

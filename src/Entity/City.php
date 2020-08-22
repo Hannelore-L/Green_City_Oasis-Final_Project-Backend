@@ -10,7 +10,9 @@ namespace App\Entity;
 //      __________________________________________________________________________________
 //                                                                                U S E
 //      __________________________________________________________________________________
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\CityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -28,6 +30,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     normalizationContext={ "groups" = { "city:read" }, "swagger_definition_name" = "Read" }
  * )
  * @ORM\Entity(repositoryClass=CityRepository::class)
+ * @ApiFilter( SearchFilter::class, properties={ "country" : "exact" } )
  */
 class City
 {
@@ -42,7 +45,7 @@ class City
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups( { "city:read" } )
+     * @Groups( { "city:read", "user:read", "review:read", "country:read" } )
      */
     private $id;
 
@@ -53,7 +56,7 @@ class City
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Country", inversedBy="cities")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups( { "city:read" } )
+     * @Groups( { "city:read", "user:read" } )
      */
     private $country;
 
@@ -62,7 +65,7 @@ class City
      * The zip code of the city
      *
      * @ORM\Column(type="smallint")
-     * @Groups( { "city:read" } )
+     * @Groups( { "city:read", "user:read", "country:read" } )
      */
     private $zip;
 
@@ -72,7 +75,7 @@ class City
      * The name of the city
      *
      * @ORM\Column(type="string", length=255)
-     * @Groups( { "city:read" } )
+     * @Groups( { "city:read", "user:read", "review:read", "country:read" } )
      */
     private $name;
 
@@ -82,7 +85,7 @@ class City
      * The province the city is located in
      *
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups( { "city:read" } )
+     * @Groups( { "city:read", "user:read", "country:read" } )
      */
     private $province;
 
@@ -93,6 +96,8 @@ class City
 
     //      -               -               -               U S E R S               -               -               -
     /**
+     * The users that live in this city
+     *
      * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="city")
      * @Groups( { "city:read" } )
      */
@@ -235,4 +240,13 @@ class City
 
         return $this;
     }
+
+
+      //      __________________________________________________________________________________
+      //                                                                        E A S Y   A D M I N
+      //      __________________________________________________________________________________
+      public function __toString()
+      {
+            return $this->name;
+      }
 }

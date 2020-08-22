@@ -12,7 +12,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\ReviewRepository;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
@@ -33,7 +33,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity(repositoryClass=ReviewRepository::class)
  * @ApiFilter( BooleanFilter::class, properties={ "isDeleted" } )
- * @ApiFilter( NumericFilter::class, properties={ "userId" , "locationId" } )
+ * @ApiFilter( SearchFilter::class, properties={
+ *       "user" : "exact",
+ *       "location" : "exact"
+ * } )
  */
 class Review
 {
@@ -48,7 +51,7 @@ class Review
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups( { "review:read" } )
+     * @Groups( { "review:read", "location:read", "user:read" } )
      */
     private $id;
 
@@ -80,7 +83,7 @@ class Review
      * The rating the user gave the location /5
      *
      * @ORM\Column(type="integer")
-     * @Groups( { "review:read", "review:write" } )
+     * @Groups( { "review:read", "review:write", "location:read", "user:read" } )
      * @Assert\NotBlank()
      */
     private $rating;
@@ -107,7 +110,6 @@ class Review
      * When the review was created
      *
      * @ORM\Column(type="datetime")
-     * @Groups( { "review:write" } )
      */
     private $createdAt;
 
@@ -117,7 +119,7 @@ class Review
      * Whether or not the user has visually deleted the review from the website
      *
      * @ORM\Column(type="boolean")
-     * @Groups( { "review:read", "review:write" } )
+     * @Groups( { "review:read", "review:write", "location:read", "user:read" } )
      */
     private $isDeleted = false;
 
@@ -208,7 +210,7 @@ class Review
     /**
      * Get the text of the review
      *
-     * @Groups( { "review:read" } )
+     * @Groups( { "review:read", "location:read", "user:read" } )
      */
     public function getDescription(): ?string
     {
@@ -251,7 +253,7 @@ class Review
     /**
      * Get when the review was created, written as time ago
      *
-     * @Groups( { "review:read" } )
+     * @Groups( { "review:read", "location:read", "user:read" } )
      * @SerializedName( "createdAt" )
      */
     public function getCreatedAtAgo(): string
@@ -278,4 +280,13 @@ class Review
 
         return $this;
     }
+
+
+      //      __________________________________________________________________________________
+      //                                                                        E A S Y   A D M I N
+      //      __________________________________________________________________________________
+      public function __toString()
+      {
+            return $this->description;
+      }
 }

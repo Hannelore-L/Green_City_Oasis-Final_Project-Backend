@@ -31,7 +31,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Entity(repositoryClass=TagRepository::class)
  * @ApiFilter( SearchFilter::class, properties={
  *       "name" : "partial",
- *       "location" : "exact"
+ *       "locations" : "exact"
  * } )
  */
 class Tag
@@ -76,14 +76,14 @@ class Tag
     //                                                                        R E L A T I O N S
     //      __________________________________________________________________________________
 
-    //      -               -               -               L O C A T I O N   I D               -               -               -
+    //      -               -               -               L O C A T I O N S               -               -               -
     /**
-     * The location that has these tags
+     * The locations that has these tags
      *
-     * @ORM\ManyToMany(targetEntity="App\Entity\Location", inversedBy="tags")
-     * @Groups( { "tag:read" } )
+     * @ORM\ManyToMany(targetEntity="App\Entity\Location", inversedBy="tags", cascade={ "persist" })
+     * @Groups( { "tag:read", "location:read" } )
      */
-    private $location;
+    private $locations;
 
 
 
@@ -95,7 +95,7 @@ class Tag
 
     public function __construct()
     {
-        $this->location = new ArrayCollection();
+        $this->locations = new ArrayCollection();
     }
 
 
@@ -153,28 +153,30 @@ class Tag
     //                                                                        R E L A T I O N S
     //      __________________________________________________________________________________
 
-    //    //      -               -               -              getter, adder, remover REVIEWS               -               -               -
+    //    //      -               -               -              getter, adder, remover LOCATION               -               -               -
     /**
-     * @return Collection|location[]
+     * @return Collection|Location[]
      */
-    public function getLocation(): Collection
+    public function getLocations(): Collection
     {
-        return $this->location;
+        return $this->locations;
     }
 
-    public function addLocation(location $location): self
+    public function addLocation(Location $location): self
     {
-        if (!$this->location->contains($location)) {
-            $this->location[] = $location;
+        if (!$this->locations->contains($location)) {
+            $this->locations[] = $location;
+             $location->addTag($this);
         }
 
         return $this;
     }
 
-    public function removeLocation(location $location): self
+    public function removeLocation(Location $location): self
     {
-        if ($this->location->contains($location)) {
-            $this->location->removeElement($location);
+        if ($this->locations->contains($location)) {
+            $this->locations->removeElement($location);
+              $location->removeTag($this);
         }
 
         return $this;

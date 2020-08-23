@@ -152,8 +152,8 @@ class Location
     /**
      * The tags belonging to this location
      *
-     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", mappedBy="location")
-     * @Groups( { "location:read" } )
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", mappedBy="locations", cascade= {"persist" } )
+     * @Groups( { "location:read", "tag:read" } )
      */
     private $tags;
 

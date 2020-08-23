@@ -20,6 +20,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
 
 //      __________________________________________________________________________________
 //                                                                             C L A S S
@@ -38,6 +41,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *       "user" : "exact",
  *       "location" : "exact"
  * } )
+ * @Vich\Uploadable()
  */
 class Image
 {
@@ -101,6 +105,7 @@ class Image
      *
      * @ORM\Column(type="string", length=512)
      * @Groups( { "image:read", "image:write", "location:read", "user:read" } )
+     * @var string
      */
     private $fileName;
 
@@ -112,6 +117,15 @@ class Image
      * @ORM\Column(type="datetime")
      */
     private $uploadedAt;
+
+
+    //      -               -               -               U P D A T E D   A T               -               -               -
+    /**
+     * When the image was uploaded
+     *
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
 
 
     //      -               -               -               C O O R D I N A T E S               -               -               -
@@ -133,15 +147,26 @@ class Image
     private $isDeleted = false;
 
 
-    //      __________________________________________________________________________________
-    //                                                                        M E T H O D S
-    //      __________________________________________________________________________________
+      //      __________________________________________________________________________________
+      //                                                                        V I C H
+      //      __________________________________________________________________________________
+      /**
+       * @Vich\UploadableField( mapping="images", fileNameProperty="fileName" )
+       * @var File
+       */
+      private $imageFile;
+
+
+      //      __________________________________________________________________________________
+     //                                                                        M E T H O D S
+     //      __________________________________________________________________________________
 
     //      -               -               -              C O N S T R U C T O R               -               -               -
 
     public function __construct()
     {
-        $this->uploadedAt = new \DateTimeImmutable();
+        $this->uploadedAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
 
@@ -218,6 +243,8 @@ class Image
     //      -               -               -              getter & setter FILE NAME               -               -               -
     /**
      * Get the name of the file of the image
+     *
+     * @return string
      */
     public function getFileName(): ?string
     {
@@ -226,6 +253,8 @@ class Image
 
     /**
      * Set the name of the file of the image
+     *
+     * @param $fileName
      */
     public function setFileName(string $fileName): self
     {
@@ -255,8 +284,40 @@ class Image
         return Carbon::instance( $this->getUploadedAt() )->diffForHumans();
     }
 
+      //      -               -               -              getter & setter UPDATED AT               -               -               -
+      /**
+       * Get then the image was updated
+       *
+       * @return mixed
+       */
+      public function getUpdatedAt()
+      {
+            return $this->updatedAt;
+      }
 
-    //      -               -               -              getter & setter COORDINATES               -               -               -
+      /**
+       * Get then the image was updated, written as time ago
+       *
+       * @Groups( { "image:read", "location:read", "user:read" } )
+       * @SerializedName( "updatedAt" )
+       */
+      public function getUpdatedAtAgo(): string
+      {
+            return Carbon::instance( $this->getUpdatedAt() )->diffForHumans();
+      }
+
+
+
+//      /**
+//       * @param mixed $updatedAt
+//       */
+//      public function setUpdatedAt($updatedAt): void
+//      {
+//            $this->updatedAt = $updatedAt;
+//      }
+
+
+      //      -               -               -              getter & setter COORDINATES               -               -               -
     /**
      * Get the coordinates of the image taken (estimate)
      */
@@ -302,5 +363,25 @@ class Image
       public function __toString()
       {
             return $this->name;
+      }
+
+
+      //      __________________________________________________________________________________
+      //                                                                        V I C H
+      //      __________________________________________________________________________________
+      /**
+       * @return File
+       */
+      public function getImageFile()
+      {
+            return $this->imageFile;
+      }
+
+      public function setImageFile(File $fileName = null)
+      {
+            $this->imageFile = $fileName;
+            if ( $fileName ) {
+                  $this->updatedAt = new \DateTime();
+            }
       }
 }

@@ -69,7 +69,7 @@ easy_admin:
                               -     { property: 'addressText', label: 'Adres tekst' }
                               -     { property: 'addressInfo', label: 'Adres Info' }
                               -     { property: 'description', label: 'Omschrijving' }
-                              -     { property: 'createdAt', label: 'Aangemaakt Op', type: 'datetime', type_options: { view_timezone: 'Europe/Brussels', model_timezone: 'GMT+1' } }
+                              -     { property: 'createdAt', label: 'Aangemaakt Op' }
                               -     { property: 'tags', label: 'Labels' }
                               -     { property: 'events', label: 'Events ' }
                               -     { property: 'images', label: 'Foto''s' }
@@ -132,25 +132,29 @@ easy_admin:
                         fields:
                               -     { property: 'isDeleted', label: 'Is Verwijderd' }
                               -     id
+#                              -     { property: 'fileName', template: 'vich_uploader_fileName.html.twig' }
+                              -     { property: 'fileName', type: 'image' , base_path: '%uploads_path%' }
                               -     { property: 'name', label: 'Naam' }
-                              -     { property: 'fileName', label: 'Bestandsnaam' }
+#                              -     { property: 'fileName', label: 'Bestandsnaam' }
                               -     { property: 'coordinates', label: 'Coördinaten' }
                               -     { property: 'uploadedAt', label: 'Opgeladen Op', type: 'datetime', type_options: { view_timezone: 'Europe/Brussels', model_timezone: 'GMT+1' } }
+                              -     { property: 'updatedAt', label: 'Gewijzigd Op', type: 'datetime', type_options: { view_timezone: 'Europe/Brussels', model_timezone: 'GMT+1' } }
                               -     { property: 'location', label: 'Locatie' }
                               -     { property: 'user', label: 'Gebruiker' }
 
-                        filters: [ 'isDeleted', 'uploadedAt', 'user', 'location' ]
+                        filters: [ 'isDeleted', 'uploadedAt', 'updatedAt', 'user', 'location' ]
 
                   #     F O R M
                   form:
                         fields:
                               -     { type: 'group', icon: 'pencil', label: 'Basis Informatie', css_class: 'col-lg-7' }
                               -     { property: 'name', label: 'Naam' }
-                              -     { property: 'fileName', label: 'Bestandsnaam' }
                               -     { property: 'coordinates', label: 'Coördinaten' }
                               -     { property: 'isDeleted', label: 'Is Verwijderd' }
                               -     { type: 'group', icon: 'th-list', label: 'Relaties', css_class: 'col-lg-5' }
                               -     { property: 'location', label: 'Locatie' }
+                              -     { type: 'group', icon: 'paperclip', label: 'Foto''s', css_class: 'col-lg-5' }
+                              -     { property: 'imageFile', label: ' ', type: 'vich_file' }
 
                   #     N E W
                   new:
@@ -166,12 +170,15 @@ easy_admin:
                         fields:
                               -     id
                               -     { property: 'name', label: 'Naam' }
-                              -     { property: 'fileName', label: 'Bestandsnaam' }
+#                              -     { property: 'fileName', label: 'Bestandsnaam' }
                               -     { property: 'coordinates', label: 'Coördinaten' }
                               -     { property: 'uploadedAt', label: 'Opgeladen Op', type: 'datetime', type_options: { view_timezone: 'Europe/Brussels', model_timezone: 'GMT+1' } }
+                              -     { property: 'updatedAt', label: 'Gewijzigd Op', type: 'datetime', type_options: { view_timezone: 'Europe/Brussels', model_timezone: 'GMT+1' } }
                               -     { property: 'isDeleted', label: 'Is Verwijderd' }
                               -     { property: 'location', label: 'Locatie' }
                               -     { property: 'user', label: 'Gebruiker' }
+#                              -     { property: 'fileName', label: 'Foto', template: 'vich_uploader_fileName.html.twig' }
+                              -     { property: 'fileName', type: 'image' }
 
 
             #      -               -               -               R E V I E W               -               -               -
@@ -380,9 +387,9 @@ easy_admin:
                               -     id
                               -     { property: 'name', label: 'Naam' }
                               -     { property: 'category', label: 'Categorie' }
-                              -     { property: 'location', label: 'Locaties' }
+                              -     { property: 'locations', label: 'Locaties' }
 
-                        filters: [ 'category', 'location' ]
+                        filters: [ 'category', 'locations' ]
 
                   #     F O R M
                   form:
@@ -391,7 +398,7 @@ easy_admin:
                               -     { property: 'name', label: 'Naam' }
                               -     { property: 'category', label: 'Categorie' }
                               -     { type: 'group', icon: 'th-list', label: 'Relaties', css_class: 'col-lg-5' }
-                              -     { property: 'location', label: 'Locaties' }
+                              -     { property: 'locations', label: 'Locaties', type_options: { by_reference: 'false' } }
 
                   #     E D I T
                   edit:
@@ -399,9 +406,6 @@ easy_admin:
 
                         actions:
                               - '-delete'
-
-                        fields:
-                              -     '-location'
 
                   #     S H O W
                   show:
@@ -414,7 +418,7 @@ easy_admin:
                               -     id
                               -     { property: 'name', label: 'Naam' }
                               -     { property: 'category', label: 'Categorie' }
-                              -     { property: 'location', label: 'Locaties' }
+                              -     { property: 'locations', label: 'Locaties' }
 
 
             #      -               -               -               C I T Y               -               -               -

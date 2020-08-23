@@ -35,6 +35,10 @@ easy_admin:
                   -     { entity: 'City', label: 'Steden', icon: 'city', params: { sortField: 'id', sortDirection: 'ASC' } }
                   -     { entity: 'Country', label: 'Landen', icon: 'globe-europe', params: { sortField: 'id', sortDirection: 'ASC' }  }
 
+
+                  -     { label: 'Links' }
+                  -     { url: 'https://wdev.be/wdev_hannelore/eindwerk/api', label: 'Api documentatie', target: '_blank', icon: 'file-code' }
+
       formats:
             date:     'l j F Y'                       # l = text of weekdays        j = numeric day o/t month without leading 0       F = text of months       Y = text of the year
             time:     'H:i e'                             # H = 24 format with leading 0            i = minutes with leading 0

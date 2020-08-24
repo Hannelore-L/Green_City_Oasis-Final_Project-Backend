@@ -81,7 +81,7 @@ class Tag
      * The locations that has these tags
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Location", inversedBy="tags", cascade={ "persist" })
-     * @Groups( { "tag:read", "location:read" } )
+     * @Groups( { "tag:read" } )
      */
     private $locations;
 

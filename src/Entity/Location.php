@@ -12,6 +12,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\LocationRepository;
 use Carbon\Carbon;
@@ -29,15 +30,18 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
  *     collectionOperations={ "get" },
  *     itemOperations={ "get" },
  *     normalizationContext={ "groups" = { "location:read" }, "swagger_definition_name" = "Read" },
+ *     attributes={ "pagination_items_per_page"=6 }
  * )
  * @ORM\Entity(repositoryClass=LocationRepository::class)
  * @ApiFilter( BooleanFilter::class, properties={ "isDeleted" } )
+ * @ApiFilter( OrderFilter::class, properties={ "createdAt" }, arguments={ "orderParameterName"="order" } )
  * @ApiFilter( SearchFilter::class, properties={
  *          "name" : "partial" ,
  *          "addressText" : "partial",
  *          "tags" : "exact",
  *          "events" : "exact"
  * } )
+ *
  */
 class Location
 {
@@ -97,7 +101,25 @@ class Location
     private $addressInfo;
 
 
-    //      -               -               -               D E S C R I P T I O N               -               -               -
+      //      -               -               -               A D D R E S S   L I N K               -               -               -
+      /**
+       * The address link
+       *
+       * @ORM\Column(type="string", length=512)
+       * @Groups( { "location:read", "image:read", "review:read" } )
+       */
+      private $addressLink;
+
+
+      //      -               -               -               C O O R D I N A T E S               -               -               -
+      /**
+       * @ORM\Column(type="string", length=255)
+       * @Groups( { "location:read", "image:read", "review:read" } )
+       */
+      private $coordinates;
+
+
+      //      -               -               -               D E S C R I P T I O N               -               -               -
     /**
      * The description of the location
      *
@@ -256,7 +278,7 @@ class Location
 
     //      -               -               -              getter & setter ADDRESS INFO               -               -               -
     /**
-     * Get the address information, what the map needs
+     * Get the address information
      */
     public function getAddressInfo(): ?string
     {
@@ -264,7 +286,7 @@ class Location
     }
 
     /**
-     * Set the address information, what the map needs
+     * Set the address information
      */
     public function setAddressInfo(string $addressInfo): self
     {
@@ -274,7 +296,49 @@ class Location
     }
 
 
-    //      -               -               -              getter & setter DESCRIPTION               -               -               -
+      //      -               -               -              getter & setter ADDRESS LINK               -               -               -
+      /**
+       * Get the address link
+       */
+      public function getAddressLink(): ?string
+      {
+            return $this->addressLink;
+      }
+
+
+
+      /**
+       * Set the address link
+       */
+      public function setAddressLink(string $addressLink): self
+      {
+            $this->addressLink = $addressLink;
+
+            return $this;
+      }
+
+
+      //      -               -               -              getter & setter COORDINATES               -               -               -
+      /**
+       * Get the coordinates
+       */
+      public function getCoordinates(): ?string
+      {
+            return $this->coordinates;
+      }
+
+      /**
+       * Set the coordinates
+       */
+      public function setCoordinates(string $coordinates): self
+      {
+            $this->coordinates = $coordinates;
+
+            return $this;
+      }
+
+
+      //      -               -               -              getter & setter DESCRIPTION               -               -               -
     /**
      * Get the description of the location
      */

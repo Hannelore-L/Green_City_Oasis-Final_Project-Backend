@@ -95,7 +95,7 @@ class Location
     /**
      * The address information, what the map needs
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=512)
      * @Groups( { "location:read", "image:read", "review:read" } )
      */
     private $addressInfo;
@@ -174,7 +174,7 @@ class Location
     /**
      * The tags belonging to this location
      *
-     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", mappedBy="locations", cascade= {"persist" } )
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", inversedBy="locations", cascade= {"persist" } )
      * @Groups( { "location:read" } )
      */
     private $tags;

@@ -64,7 +64,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      * The id of the city the user lives in
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\City", inversedBy="users")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      * @Groups( { "user:read", "user:write", "review:read" } )
      */
     private $city;
@@ -99,6 +99,12 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      *
      * @ORM\Column(type="string", length=255)
      * @Groups( { "user:write" } )
+     * @Assert\Length(
+     *     min=8,
+     *     minMessage="Please put a minimum of 8 characters.",
+     *     max=20,
+     *     maxMessage="Please do not exceed a 20 characters."
+     * )
      */
     private $password;
 
@@ -120,6 +126,12 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      * @ORM\Column(type="string", length=255)
      * @Groups( { "user:read", "user:write", "image:read", "review:read", "city:read", "country:read" } )
      * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min=2,
+     *     minMessage="Please put a minimum of 2 characters.",
+     *     max=30,
+     *     maxMessage="Please do not exceed a 30 characters."
+     * )
      */
     private $displayName;
 
@@ -130,6 +142,13 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      *
      * @ORM\Column(type="string", length=255)
      * @Groups( { "user:read", "user:write" } )
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min=2,
+     *     minMessage="Please put a minimum of 2 characters.",
+     *     max=30,
+     *     maxMessage="Please do not exceed a 30 characters."
+     * )
      */
     private $firstName;
 
@@ -140,6 +159,13 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      *
      * @ORM\Column(type="string", length=255)
      * @Groups( { "user:read", "user:write" } )
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min=2,
+     *     minMessage="Please put a minimum of 2 characters.",
+     *     max=30,
+     *     maxMessage="Please do not exceed a 30 characters."
+     * )
      */
     private $lastName;
 

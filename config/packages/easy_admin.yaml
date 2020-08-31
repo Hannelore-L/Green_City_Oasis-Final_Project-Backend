@@ -36,6 +36,7 @@ easy_admin:
                   -     { entity: 'Country', label: 'Landen', icon: 'globe-europe', params: { sortField: 'id', sortDirection: 'ASC' }  }
                   
                   -     { label: 'Links' }
+                  -     { url: 'https://green-city-oasis.vercel.app/', label: 'Green City Oasis', target: '_blank', icon: 'seedling' }
                   -     { url: 'https://wdev.be/wdev_hannelore/eindwerk/api', label: 'Api documentatie', target: '_blank', icon: 'file-code' }
 
 

@@ -27,8 +27,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     collectionOperations={ "get" },
  *     itemOperations={ "get" },
- *     normalizationContext={ "groups" = { "city:read" }, "swagger_definition_name" = "Read" }
- * )
+ *     normalizationContext={ "groups" = { "city:read" }, "swagger_definition_name" = "Read" },
+ *     attributes={ "pagination_items_per_page"=500 } * )
  * @ORM\Entity(repositoryClass=CityRepository::class)
  * @ApiFilter( SearchFilter::class, properties={ "country" : "exact" } )
  */

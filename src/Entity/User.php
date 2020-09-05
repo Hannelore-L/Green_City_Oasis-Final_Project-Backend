@@ -19,7 +19,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -31,7 +30,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     collectionOperations={ "get", "post" },
  *     itemOperations={ "get", "delete", "put" },
  *     normalizationContext={ "groups" = { "user:read" }, "swagger_definition_name" = "Read" },
- *     denormalizationContext={ "groups" = { "user:write" }, "swagger_definition_name" = "Write" }
+ *     denormalizationContext={ "groups" = { "user:write" }, "swagger_definition_name" = "Write" },
+ *     attributes={ "pagination_enabled" = false }
  * )
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ApiFilter( SearchFilter::class, properties={
@@ -210,7 +210,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      */
     private $reviews;
 
-
+      private $passwordEncoder;
     //      __________________________________________________________________________________
     //                                                                        M E T H O D S
     //      __________________________________________________________________________________
@@ -343,12 +343,12 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     /**
      * Set the password of the user
      */
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
+      public function setPassword(string $password): self
+      {
+            $this->password = $password;
 
-        return $this;
-    }
+            return $this;
+      }
 
 
     //      -               -               -              getter SALT               -               -               -

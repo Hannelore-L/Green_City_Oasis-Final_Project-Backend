@@ -29,7 +29,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     collectionOperations={ "get", "post" },
  *     itemOperations={ "get", "put" },
  *     normalizationContext={ "groups" = { "review:read" }, "swagger_definition_name" = "Read"  },
- *     denormalizationContext={ "groups" = { "review:write" }, "swagger_definition_name" = "Write"  }
+ *     denormalizationContext={ "groups" = { "review:write" }, "swagger_definition_name" = "Write"  },
+ *     attributes={ "pagination_enabled" = false }
  * )
  * @ORM\Entity(repositoryClass=ReviewRepository::class)
  * @ApiFilter( BooleanFilter::class, properties={ "isDeleted" } )

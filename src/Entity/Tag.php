@@ -26,7 +26,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     collectionOperations={ "get" },
  *     itemOperations={ "get" },
- *     normalizationContext={ "groups" = { "tag:read" }, "swagger_definition_name" = "Read" }
+ *     normalizationContext={ "groups" = { "tag:read" }, "swagger_definition_name" = "Read" },
+ *     attributes={ "pagination_enabled" = false }
  * )
  * @ORM\Entity(repositoryClass=TagRepository::class)
  * @ApiFilter( SearchFilter::class, properties={

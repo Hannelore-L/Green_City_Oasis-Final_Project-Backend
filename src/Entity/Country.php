@@ -25,7 +25,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     collectionOperations={ "get" },
  *     itemOperations={ "get" },
  *     normalizationContext={ "groups" = { "country:read" }, "swagger_definition_name" = "Read" },
- *     attributes={ "pagination_items_per_page"=3000 }
+ *     attributes={ "pagination_enabled" = false }
  * )
  * @ORM\Entity(repositoryClass=CountryRepository::class)
  */

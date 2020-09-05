@@ -12,6 +12,7 @@ namespace App\Entity;
 //      __________________________________________________________________________________
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\CityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -28,8 +29,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     collectionOperations={ "get" },
  *     itemOperations={ "get" },
  *     normalizationContext={ "groups" = { "city:read" }, "swagger_definition_name" = "Read" },
- *     attributes={ "pagination_items_per_page"=500 } * )
+ *     attributes={ "pagination_items_per_page"=2765 }
+ * )
  * @ORM\Entity(repositoryClass=CityRepository::class)
+ *  @ApiFilter(OrderFilter::class, properties={ "name" }, arguments={ "orderParameterName" = "order" } )
  * @ApiFilter( SearchFilter::class, properties={ "country" : "exact" } )
  */
 class City
@@ -55,7 +58,7 @@ class City
      * The id of the country this city belongs to
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Country", inversedBy="cities")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      * @Groups( { "city:read", "user:read" } )
      */
     private $country;

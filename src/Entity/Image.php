@@ -33,6 +33,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *     itemOperations={ "get", "put" },
  *     normalizationContext={ "groups" = { "image:read" }, "swagger_definition_name" = "Read" },
  *     denormalizationContext={ "groups" = { "image:write" }, "swagger_definition_name" = "Write" },
+ *     attributes={ "pagination_enabled" = false }
  * )
  * @ORM\Entity(repositoryClass=ImageRepository::class)
  * @ApiFilter( BooleanFilter::class, properties={ "isDeleted" } )
@@ -56,7 +57,7 @@ class Image
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups(  { "image:read", "location:read", "user:read" } )
+     * @Groups(  { "image:read", "location:read", "user:read", "tag:read" } )
      */
     private $id;
 
@@ -87,7 +88,7 @@ class Image
      * The name of the image
      *
      * @ORM\Column(type="string", length=255)
-     * @Groups( { "image:read", "image:write", "location:read", "user:read" } )
+     * @Groups( { "image:read", "image:write", "location:read", "user:read" , "tag:read"} )
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min=2,
@@ -104,7 +105,7 @@ class Image
      * The name of the file of the image
      *
      * @ORM\Column(type="string", length=512)
-     * @Groups( { "image:read", "image:write", "location:read", "user:read" } )
+     * @Groups( { "image:read", "image:write", "location:read", "user:read", "tag:read" } )
      * @var string
      */
     private $fileName;
@@ -133,7 +134,7 @@ class Image
      * The coordinates of the image taken (estimate)
      *
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups( { "image:read", "location:read", "user:read" } )
+     * @Groups( { "image:read", "location:read", "user:read", "tag:read" } )
      */
     private $coordinates;
 
@@ -142,7 +143,7 @@ class Image
     /**
      * Whether or not the image is visual on the website
      * @ORM\Column(type="boolean")
-     * @Groups( { "image:read", "image:write", "location:read", "user:read" } )
+     * @Groups( { "image:read", "image:write", "location:read", "user:read", "tag:read" } )
      */
     private $isDeleted = false;
 

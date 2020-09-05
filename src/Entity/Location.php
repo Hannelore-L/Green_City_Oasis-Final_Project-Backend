@@ -30,7 +30,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
  *     collectionOperations={ "get" },
  *     itemOperations={ "get" },
  *     normalizationContext={ "groups" = { "location:read" }, "swagger_definition_name" = "Read" },
- *     attributes={ "pagination_items_per_page"=6 }
+ *     attributes={ "pagination_enabled" = false }
  * )
  * @ORM\Entity(repositoryClass=LocationRepository::class)
  * @ApiFilter( BooleanFilter::class, properties={ "isDeleted" } )
@@ -156,7 +156,7 @@ class Location
      * The images of this location
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="location")
-     * @Groups( { "location:read" } )
+     * @Groups( { "location:read" , "tag:read"} )
      */
     private $images;
 

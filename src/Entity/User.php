@@ -65,7 +65,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\City", inversedBy="users")
      * @ORM\JoinColumn(nullable=true)
-     * @Groups( { "user:read", "user:write", "review:read" } )
+     * @Groups( { "user:read", "user:write", "review:read", "location:read" } )
      */
     private $city;
 
@@ -124,7 +124,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      * The display name of the user
      *
      * @ORM\Column(type="string", length=255)
-     * @Groups( { "user:read", "user:write", "image:read", "review:read", "city:read", "country:read" } )
+     * @Groups( { "user:read", "user:write", "image:read", "review:read", "city:read", "country:read", "location:read" } )
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min=2,

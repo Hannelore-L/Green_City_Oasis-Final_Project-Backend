@@ -34,7 +34,7 @@
 
                   $payload = $event->getData();
                   $payload['id']=$user->getId();
-
+                  $payload['displayName']=$user->getDisplayName();
                   $event->setData($payload);
             }
       }

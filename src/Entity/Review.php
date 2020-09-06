@@ -74,7 +74,7 @@ class Review
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="reviews")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups( { "review:read", "review:write" } )
+     * @Groups( { "review:read", "review:write", "location:read" } )
      */
     private $user;
 
@@ -83,7 +83,7 @@ class Review
     /**
      * The rating the user gave the location /5
      *
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      * @Groups( { "review:read", "review:write", "location:read", "user:read" } )
      * @Assert\NotBlank()
      */

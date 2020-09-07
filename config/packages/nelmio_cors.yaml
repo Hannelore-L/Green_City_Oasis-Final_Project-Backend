@@ -9,7 +9,7 @@ nelmio_cors:
     paths:
         '^/api/':
             origin_regex: true
-            allow_origin: ['^https://green-city-oasis.vercel.app/+','^http://localhost:[0-9]+']
+            allow_origin: ['^https://green-city-oasis+','^http://localhost:[0-9]+']
             allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
             allow_headers: ['Content-Type', 'Authorization']
             expose_headers: ['Link']

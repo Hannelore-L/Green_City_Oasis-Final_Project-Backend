@@ -48,7 +48,7 @@ class Tag
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups( { "tag:read", "location:read" } )
+     * @Groups( { "tag:read" } )
      */
     private $id;
 
@@ -58,7 +58,7 @@ class Tag
      * The name of the tag
      *
      * @ORM\Column(type="string", length=255)
-     * @Groups( { "tag:read", "location:read" } )
+     * @Groups( { "tag:read"} )
      */
     private $name;
 
@@ -68,7 +68,7 @@ class Tag
      * The broader category the tag belongs to
      *
      * @ORM\Column(type="string", length=255)
-     * @Groups( { "tag:read", "location:read" } )
+     * @Groups( { "tag:read" } )
      */
     private $category;
 

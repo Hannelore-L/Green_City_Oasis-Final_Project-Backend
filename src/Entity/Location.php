@@ -56,7 +56,7 @@ class Location
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups( { "location:read", "image:read", "review:read", "tag:read", "event:read" } )
+     * @Groups( { "location:read" } )
      */
     private $id;
 
@@ -66,7 +66,7 @@ class Location
      * The name of the location
      *
      * @ORM\Column(type="string", length=255)
-     * @Groups( { "location:read", "image:read", "review:read", "tag:read", "event:read" } )
+     * @Groups( { "location:read" } )
      */
     private $name;
 
@@ -86,7 +86,7 @@ class Location
      * The address in text form, how it will show on the website
      *
      * @ORM\Column(type="string", length=255)
-     * @Groups( { "location:read", "image:read", "review:read" } )
+     * @Groups( { "location:read" } )
      */
     private $addressText;
 
@@ -96,7 +96,7 @@ class Location
      * The address information, what the map needs
      *
      * @ORM\Column(type="string", length=512)
-     * @Groups( { "location:read", "image:read", "review:read" } )
+     * @Groups( { "location:read" } )
      */
     private $addressInfo;
 
@@ -106,7 +106,7 @@ class Location
        * The address link
        *
        * @ORM\Column(type="string", length=512)
-       * @Groups( { "location:read", "image:read", "review:read" } )
+       * @Groups( { "location:read" } )
        */
       private $addressLink;
 
@@ -114,7 +114,7 @@ class Location
       //      -               -               -               C O O R D I N A T E S               -               -               -
       /**
        * @ORM\Column(type="string", length=255)
-       * @Groups( { "location:read", "image:read", "review:read" } )
+       * @Groups( { "location:read" } )
        */
       private $coordinates;
 
@@ -143,7 +143,7 @@ class Location
      * Whether or not the location has been visually deleted from the website
      *
      * @ORM\Column(type="boolean")
-     * @Groups( { "location:read", "image:read", "review:read", "tag:read", "event:read" } )
+     * @Groups( { "location:read" } )
      */
     private $isDeleted = false;
 
@@ -156,7 +156,7 @@ class Location
      * The images of this location
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="location")
-     * @Groups( { "location:read" , "tag:read"} )
+     * @Groups( { "location:read"} )
      */
     private $images;
 

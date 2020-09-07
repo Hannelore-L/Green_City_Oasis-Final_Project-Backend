@@ -45,7 +45,7 @@ class Event
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups( { "event:read", "location:read" } )
+     * @Groups( { "event:read" } )
      */
     private $id;
 
@@ -55,7 +55,7 @@ class Event
      * The name of the event
      *
      * @ORM\Column(type="string", length=255)
-     * @Groups( { "event:read", "location:read" } )
+     * @Groups( { "event:read" } )
      */
     private $name;
 
@@ -65,7 +65,7 @@ class Event
      * The short description of the event
      *
      * @ORM\Column(type="text")
-     * @Groups( { "event:read", "location:read" } )
+     * @Groups( { "event:read" } )
      */
     private $description;
 
@@ -75,7 +75,7 @@ class Event
      * The link to the official event page, if this exists
      *
      * @ORM\Column(type="string", length=512, nullable=true)
-     * @Groups( { "event:read", "location:read" } )
+     * @Groups( { "event:read" } )
      */
     private $link;
 
@@ -85,7 +85,7 @@ class Event
      * The start date of the event
      *
      * @ORM\Column(type="date")
-     * @Groups( { "event:read", "location:read" } )
+     * @Groups( { "event:read" } )
      */
     private $startDate;
 
@@ -95,7 +95,7 @@ class Event
      * The end date of the event
      *
      * @ORM\Column(type="date")
-     * @Groups( { "event:read", "location:read" } )
+     * @Groups( { "event:read" } )
      */
     private $endDate;
 
@@ -105,7 +105,7 @@ class Event
      * The start time of the event
      *
      * @ORM\Column(type="time")
-     * @Groups( { "event:read", "location:read" } )
+     * @Groups( { "event:read" } )
      */
     private $startTime;
 
@@ -115,7 +115,7 @@ class Event
      * The end time of the event
      *
      * @ORM\Column(type="time")
-     * @Groups( { "event:read", "location:read" } )
+     * @Groups( { "event:read" } )
 b     */
     private $endTime;
 

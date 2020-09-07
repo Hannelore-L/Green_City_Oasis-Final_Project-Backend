@@ -54,7 +54,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups( { "user:read", "image:read", "review:read", "city:read", "country:read" } )
+     * @Groups( { "user:read"} )
      */
     private $id;
 
@@ -65,7 +65,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\City", inversedBy="users")
      * @ORM\JoinColumn(nullable=true)
-     * @Groups( { "user:read", "user:write", "review:read", "location:read" } )
+     * @Groups( { "user:read", "user:write" } )
      */
     private $city;
 
@@ -114,7 +114,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      * The role of the user
      *
      * @ORM\Column(type="simple_array", nullable=true)
-     * @Groups( { "user:read", "image:read", "review:read", "city:read" } )
+     * @Groups( { "user:read" } )
      */
     private $roles = array();
 
@@ -124,7 +124,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      * The display name of the user
      *
      * @ORM\Column(type="string", length=255)
-     * @Groups( { "user:read", "user:write", "image:read", "review:read", "city:read", "country:read", "location:read" } )
+     * @Groups( { "user:read" } )
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min=2,
@@ -426,7 +426,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     /**
      * Get the time when the user made their account
      *
-     * @Groups( { "user:read", "image:read", "review:read", "city:read", "country:read" } )
+     * @Groups( { "user:read" } )
      */
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -436,7 +436,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     /**
      * Get the time when the user made their account, written as time ago
      *
-     * @Groups( { "user:read", "image:read", "review:read", "city:read", "country:read" } )
+     * @Groups( { "user:read"  } )
      */
     public function getCreatedAtAgo(): string
     {

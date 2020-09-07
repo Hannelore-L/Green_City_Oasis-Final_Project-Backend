@@ -42,7 +42,7 @@ class Country
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups( { "country:read", "user:read", "city:read" } )
+     * @Groups( { "country:read" } )
      */
     private $id;
 
@@ -52,7 +52,7 @@ class Country
      * The name of the country
      *
      * @ORM\Column(type="string", length=255)
-     * @Groups( { "country:read", "user:read", "city:read" } )
+     * @Groups( { "country:read" } )
      */
     private $name;
 

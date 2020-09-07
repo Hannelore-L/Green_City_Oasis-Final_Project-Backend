@@ -57,7 +57,7 @@ class Image
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups(  { "image:read", "location:read", "user:read", "tag:read" } )
+     * @Groups(  { "image:read" } )
      */
     private $id;
 
@@ -88,7 +88,7 @@ class Image
      * The name of the image
      *
      * @ORM\Column(type="string", length=255)
-     * @Groups( { "image:read", "image:write", "location:read", "user:read" , "tag:read"} )
+     * @Groups( { "image:read", "image:write"} )
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min=2,
@@ -105,7 +105,7 @@ class Image
      * The name of the file of the image
      *
      * @ORM\Column(type="string", length=512)
-     * @Groups( { "image:read", "image:write", "location:read", "user:read", "tag:read" } )
+     * @Groups( { "image:read", "image:write" } )
      * @var string
      */
     private $fileName;
@@ -134,7 +134,7 @@ class Image
      * The coordinates of the image taken (estimate)
      *
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups( { "image:read", "location:read", "user:read", "tag:read" } )
+     * @Groups( { "image:read" } )
      */
     private $coordinates;
 
@@ -143,7 +143,7 @@ class Image
     /**
      * Whether or not the image is visual on the website
      * @ORM\Column(type="boolean")
-     * @Groups( { "image:read", "image:write", "location:read", "user:read", "tag:read" } )
+     * @Groups( { "image:read", "image:write" } )
      */
     private $isDeleted = false;
 
@@ -277,7 +277,7 @@ class Image
     /**
      * Get then the image was uploaded, written as time ago
      *
-     * @Groups( { "image:read", "location:read", "user:read" } )
+     * @Groups( { "image:read" } )
      * @SerializedName( "uploadedAt" )
      */
     public function getUploadedAtAgo(): string
@@ -299,7 +299,7 @@ class Image
       /**
        * Get then the image was updated, written as time ago
        *
-       * @Groups( { "image:read", "location:read", "user:read" } )
+       * @Groups( { "image:read" } )
        * @SerializedName( "updatedAt" )
        */
       public function getUpdatedAtAgo(): string

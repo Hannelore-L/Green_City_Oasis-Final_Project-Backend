@@ -52,7 +52,7 @@ class Review
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups( { "review:read", "location:read", "user:read" } )
+     * @Groups( { "review:read" } )
      */
     private $id;
 
@@ -74,7 +74,7 @@ class Review
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="reviews")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups( { "review:read", "review:write", "location:read" } )
+     * @Groups( { "review:read", "review:write"} )
      */
     private $user;
 
@@ -84,7 +84,7 @@ class Review
      * The rating the user gave the location /5
      *
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups( { "review:read", "review:write", "location:read", "user:read" } )
+     * @Groups( { "review:read", "review:write"} )
      * @Assert\NotBlank()
      */
     private $rating;
@@ -120,7 +120,7 @@ class Review
      * Whether or not the user has visually deleted the review from the website
      *
      * @ORM\Column(type="boolean")
-     * @Groups( { "review:read", "review:write", "location:read", "user:read" } )
+     * @Groups( { "review:read", "review:write" } )
      */
     private $isDeleted = false;
 
@@ -211,7 +211,7 @@ class Review
     /**
      * Get the text of the review
      *
-     * @Groups( { "review:read", "location:read", "user:read" } )
+     * @Groups( { "review:read" } )
      */
     public function getDescription(): ?string
     {
@@ -254,7 +254,7 @@ class Review
     /**
      * Get when the review was created, written as time ago
      *
-     * @Groups( { "review:read", "location:read", "user:read" } )
+     * @Groups( { "review:read" } )
      * @SerializedName( "createdAt" )
      */
     public function getCreatedAtAgo(): string

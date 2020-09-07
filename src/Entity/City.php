@@ -48,7 +48,7 @@ class City
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups( { "city:read", "user:read", "review:read", "country:read" } )
+     * @Groups( { "city:read" } )
      */
     private $id;
 
@@ -59,7 +59,7 @@ class City
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Country", inversedBy="cities")
      * @ORM\JoinColumn(nullable=true)
-     * @Groups( { "city:read", "user:read" } )
+     * @Groups( { "city:read" } )
      */
     private $country;
 
@@ -68,7 +68,7 @@ class City
      * The zip code of the city
      *
      * @ORM\Column(type="smallint")
-     * @Groups( { "city:read", "user:read", "country:read" } )
+     * @Groups( { "city:read" } )
      */
     private $zip;
 
@@ -78,7 +78,7 @@ class City
      * The name of the city
      *
      * @ORM\Column(type="string", length=255)
-     * @Groups( { "city:read", "user:read", "review:read", "country:read" } )
+     * @Groups( { "city:read" } )
      */
     private $name;
 
@@ -88,7 +88,7 @@ class City
      * The province the city is located in
      *
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups( { "city:read", "user:read", "country:read" } )
+     * @Groups( { "city:read" } )
      */
     private $province;
 
